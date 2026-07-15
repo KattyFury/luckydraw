@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>LuckyDraw</title>
   <meta name="description" content="LuckyDraw" />
   <meta name="theme-color" content="#2563EB" />
@@ -39,29 +39,52 @@
       margin: 0;
       height: 100%;
       overflow: hidden;
-      background: radial-gradient(ellipse at 50% 30%, #eef6ff 0%, #f8fafc 50%, #fff 100%);
+      background: #0f172a;
     }
 
     /*
-      10 hàng bằng nhau (100dvh):
+      KHUNG MOBILE CỐ ĐỊNH chiều ngang + 10 hàng dọc:
       Hàng 1      → Edit
       Hàng 2      → trống
       Hàng 3–8    → vòng xoay
-      Hàng 9      → Spin (chính giữa mép dưới vòng xoay & navbar)
+      Hàng 9      → Spin (giữa mép dưới vòng xoay & navbar)
       Hàng 10     → navbar
     */
     .app {
+      /* Khóa ngang kiểu phone (~iPhone), full width trên máy thật */
+      width: 100%;
+      max-width: 390px;
+      margin: 0 auto;
       height: 100dvh;
       height: 100svh;
-      max-width: 520px;
-      margin: 0 auto;
+      max-height: 100dvh;
+      max-height: 100svh;
       display: grid;
       grid-template-rows: repeat(10, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1fr);
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 30%, #eef6ff 0%, #f8fafc 50%, #fff 100%);
       padding:
         env(safe-area-inset-top, 0)
         env(safe-area-inset-right, 0)
         0
         env(safe-area-inset-left, 0);
+    }
+
+    /* Desktop/tablet: khung phone giữa màn, không kéo full ngang */
+    @media (min-width: 391px) {
+      body {
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        background: #0f172a;
+      }
+      .app {
+        width: 390px;
+        max-width: 390px;
+        flex: 0 0 390px;
+        box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 25px 60px rgba(0,0,0,.45);
+      }
     }
 
     /* Hàng 1 — Edit */
@@ -246,14 +269,7 @@
       border-color: #2563eb;
     }
 
-    /* Desktop: keep phone-like column centered */
-    @media (min-width: 640px) {
-      .app {
-        box-shadow: 0 0 0 1px rgba(15,23,42,.06), 0 25px 50px rgba(15,23,42,.08);
-        border-radius: 0;
-      }
-      .tab-btn { font-size: 0.85rem; }
-    }
+    .tab-btn { font-size: 0.78rem; }
   </style>
 </head>
 <body class="font-barlow text-slate-800 antialiased">
