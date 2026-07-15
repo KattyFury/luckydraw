@@ -29,14 +29,18 @@
       background: radial-gradient(ellipse at 50% 30%, #eef6ff 0%, #f8fafc 50%, #fff 100%);
     }
 
-    /* ── 10 equal rows on phone ── */
+    /*
+      Layout dọc:
+      Edit (cố định) → vùng vòng quay (flex:1, căn GIỮA thật) → Spin → Navbar
+      Trước đây grid 10 hàng chỉ cho wheel ở nửa trên → nhìn cao.
+    */
     .app {
       height: 100dvh;
       height: 100svh;
       max-width: 520px;
       margin: 0 auto;
-      display: grid;
-      grid-template-rows: repeat(10, minmax(0, 1fr));
+      display: flex;
+      flex-direction: column;
       padding:
         env(safe-area-inset-top, 0)
         env(safe-area-inset-right, 0)
@@ -44,14 +48,14 @@
         env(safe-area-inset-left, 0);
     }
 
-    /* Row 1 — chỉ Edit (góc phải) */
+    /* Chỉ Edit (góc phải) */
     .row-top {
-      grid-row: 1;
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding: 0 14px;
-      min-height: 0;
+      padding: 10px 14px 4px;
+      min-height: 52px;
     }
     .edit-btn {
       display: inline-flex;
@@ -71,46 +75,52 @@
     }
     .edit-btn:active { transform: scale(0.97); }
 
-    /* Rows 2–7 — vòng quay */
+    /* Vùng giữa: vòng quay căn giữa theo cả chiều dọc + ngang */
     .row-wheel {
-      grid-row: 2 / 8;
+      flex: 1 1 auto;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 0;
-      padding: 4px 12px;
+      padding: 8px 14px;
       position: relative;
+      container-type: size;
     }
 
-    /* Rows 8–9 — khoảng giữa vòng quay & navbar: SPIN nằm chính giữa */
+    /* Spin nằm giữa vòng quay và navbar */
     .row-spin {
-      grid-row: 8 / 10;
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 0;
-      padding: 0 16px;
+      height: 68px;
+      padding: 0 16px 6px;
       width: 100%;
     }
 
-    /* Row 10 — navbar tabs (hàng chót) */
+    /* Navbar hàng chót */
     .row-nav {
-      grid-row: 10;
+      flex: 0 0 auto;
       display: flex;
       align-items: stretch;
-      min-height: 0;
+      height: 56px;
+      min-height: 56px;
       border-top: 1px solid rgba(15, 23, 42, 0.08);
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       padding-bottom: env(safe-area-inset-bottom, 0);
+      height: calc(56px + env(safe-area-inset-bottom, 0px));
     }
 
     .wheel-wrap {
       position: relative;
-      width: min(78vw, 100%, calc((100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 0.52));
-      aspect-ratio: 1;
+      /* Vuông vừa khít vùng trống — căn giữa thật, không bị đẩy lên */
+      width: min(100cqw, 100cqh, 92vw, 420px);
+      height: min(100cqw, 100cqh, 92vw, 420px);
+      max-width: 100%;
       max-height: 100%;
+      aspect-ratio: 1;
       filter: drop-shadow(0 14px 24px rgba(15, 23, 42, 0.16));
       cursor: pointer;
       touch-action: manipulation;
@@ -238,7 +248,7 @@
       <button id="btnEdit" type="button" class="edit-btn" title="Chỉnh sửa vòng quay">Edit</button>
     </header>
 
-    <!-- Rows 2–8: wheel -->
+    <!-- Vùng giữa màn hình: vòng quay -->
     <section class="row-wheel">
       <div class="wheel-wrap" id="wheelBox" role="button" tabindex="0" aria-label="Chạm để quay">
         <!-- Droplet pointer bottom-left -->
@@ -254,7 +264,7 @@
       </div>
     </section>
 
-    <!-- Rows 8–9: spin (giữa vòng quay & navbar) -->
+    <!-- Spin: giữa vòng quay & navbar -->
     <div class="row-spin">
       <button id="btnSpin" type="button" class="spin-btn">Spin</button>
     </div>
@@ -463,7 +473,19 @@
 
     // ─── Canvas wheel ────────────────────────────────────────
     function resizeCanvas() {
-      const size = wheelBox.clientWidth;
+      const parent = wheelBox.parentElement;
+      // Fit square into the free middle zone (true center on phone)
+      let size = Math.min(wheelBox.clientWidth || 0, wheelBox.clientHeight || 0);
+      if (parent) {
+        const pw = parent.clientWidth - 28;
+        const ph = parent.clientHeight - 16;
+        const fit = Math.max(0, Math.min(pw, ph, 420));
+        if (fit > 0) {
+          size = fit;
+          wheelBox.style.width = fit + 'px';
+          wheelBox.style.height = fit + 'px';
+        }
+      }
       if (!size) return;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(size * dpr);
