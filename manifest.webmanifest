@@ -1,7 +1,7 @@
 {
-  "name": "luckydraw",
-  "short_name": "luckydraw",
-  "description": "Vòng quay ăn nhậu / party",
+  "name": "LuckyDraw",
+  "short_name": "LuckyDraw",
+  "description": "LuckyDraw",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
