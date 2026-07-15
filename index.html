@@ -181,7 +181,19 @@
     }
     .wheel-wrap.spinning { cursor: wait; }
     .wheel-wrap:active:not(.spinning) { transform: scale(0.985); }
+    /* Bóng TRÒN riêng — box-shadow trên canvas luôn ra hình vuông */
+    .wheel-shadow {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.22);
+      pointer-events: none;
+      z-index: 0;
+    }
     #wheel {
+      position: relative;
+      z-index: 1;
       display: block;
       width: 100%;
       height: 100%;
@@ -189,8 +201,8 @@
       background: transparent;
       border: none;
       outline: none;
-      /* Bóng tròn theo hình bánh xe, không hộp vuông */
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+      box-shadow: none;
+      filter: none;
     }
 
     /* Droplet pointer — bottom-left, tip chọt sâu vào trong vòng */
@@ -309,6 +321,7 @@
     <!-- Hàng 3–7: vòng xoay -->
     <section class="row-wheel">
       <div class="wheel-wrap" id="wheelBox" role="button" tabindex="0" aria-label="Chạm để quay">
+        <div class="wheel-shadow" aria-hidden="true"></div>
         <!-- Droplet pointer bottom-left -->
         <div class="pointer" aria-hidden="true">
           <svg viewBox="0 0 42 58" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
