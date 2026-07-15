@@ -633,15 +633,20 @@
         ctx.restore();
       }
 
-      // Chốt giữa tối giản — không viền trắng
-      const hub = Math.max(10, size * 0.038);
+      // Chốt giữa — đen + đỏ (đồng bộ pointer giọt nước)
+      const hub = Math.max(11, size * 0.042);
       ctx.beginPath();
       ctx.arc(0, 0, hub, 0, Math.PI * 2);
-      ctx.fillStyle = '#0f172a';
+      ctx.fillStyle = '#0f0f0f';
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(0, 0, hub * 0.38, 0, Math.PI * 2);
-      ctx.fillStyle = '#334155';
+      ctx.arc(0, 0, hub * 0.55, 0, Math.PI * 2);
+      ctx.fillStyle = '#ef2222';
+      ctx.fill();
+      // highlight nhẹ giống pointer
+      ctx.beginPath();
+      ctx.ellipse(-hub * 0.12, -hub * 0.14, hub * 0.18, hub * 0.12, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,122,122,0.45)';
       ctx.fill();
 
       ctx.restore();
