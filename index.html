@@ -37,64 +37,60 @@
     html, body {
       font-family: 'Barlow', system-ui, sans-serif;
       margin: 0;
+      width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #0f172a;
+      background: radial-gradient(ellipse at 50% 30%, #eef6ff 0%, #f8fafc 50%, #fff 100%);
     }
 
     /*
-      KHUNG MOBILE CỐ ĐỊNH chiều ngang + 10 hàng dọc:
-      Hàng 1      → Edit
-      Hàng 2      → trống
-      Hàng 3–8    → vòng xoay
-      Hàng 9      → Spin (giữa mép dưới vòng xoay & navbar)
-      Hàng 10     → navbar
+      Mobile: full ngang (flexible 100%)
+      10 hàng dọc bằng nhau (1fr × 10):
+      1 Edit · 2 trống · 3–8 vòng xoay · 9 Spin · 10 navbar
     */
     .app {
-      /* Khóa ngang kiểu phone (~iPhone), full width trên máy thật */
       width: 100%;
-      max-width: 390px;
+      max-width: 100%;
       margin: 0 auto;
       height: 100dvh;
       height: 100svh;
-      max-height: 100dvh;
-      max-height: 100svh;
       display: grid;
       grid-template-rows: repeat(10, minmax(0, 1fr));
       grid-template-columns: minmax(0, 1fr);
       overflow: hidden;
       background: radial-gradient(ellipse at 50% 30%, #eef6ff 0%, #f8fafc 50%, #fff 100%);
-      padding:
-        env(safe-area-inset-top, 0)
-        env(safe-area-inset-right, 0)
-        0
-        env(safe-area-inset-left, 0);
+      /* safe-area trong app, không phá hàng 10 */
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-right: env(safe-area-inset-right, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      padding-left: env(safe-area-inset-left, 0px);
     }
 
-    /* Desktop/tablet: khung phone giữa màn, không kéo full ngang */
-    @media (min-width: 391px) {
+    /* Chỉ desktop/tablet lớn: thu khung giữa màn cho dễ xem */
+    @media (min-width: 768px) {
       body {
-        display: flex;
-        align-items: stretch;
-        justify-content: center;
         background: #0f172a;
+        display: flex;
+        justify-content: center;
       }
       .app {
-        width: 390px;
-        max-width: 390px;
-        flex: 0 0 390px;
+        width: min(100%, 430px);
+        max-width: 430px;
         box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 25px 60px rgba(0,0,0,.45);
       }
     }
 
     /* Hàng 1 — Edit */
     .row-top {
-      grid-row: 1;
+      grid-row: 1 / 2;
+      align-self: stretch;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: flex-end;
       padding: 0 14px;
       min-height: 0;
+      overflow: hidden;
     }
     .edit-btn {
       display: inline-flex;
@@ -116,37 +112,50 @@
 
     /* Hàng 3–8 — vòng xoay */
     .row-wheel {
-      grid-row: 3 / 9; /* lines 3 → 9 = rows 3,4,5,6,7,8 */
+      grid-row: 3 / 9; /* rows 3,4,5,6,7,8 */
+      align-self: stretch;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 0;
       padding: 0 12px;
       position: relative;
+      overflow: hidden;
     }
 
-    /* Hàng 9 — Spin: chính giữa khoảng mép dưới vòng xoay ↔ navbar */
+    /* Hàng 9 — Spin */
     .row-spin {
-      grid-row: 9;
+      grid-row: 9 / 10;
+      align-self: stretch;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 0;
       padding: 0 16px;
-      width: 100%;
+      overflow: hidden;
     }
 
-    /* Hàng 10 — navbar */
+    /* Hàng 10 — navbar (đúng 1/10 chiều cao grid) */
     .row-nav {
-      grid-row: 10;
-      display: flex;
-      align-items: stretch;
+      grid-row: 10 / 11;
+      align-self: stretch;
+      width: 100%;
+      height: 100%;
       min-height: 0;
+      max-height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-content: stretch;
+      overflow: hidden;
       border-top: 1px solid rgba(15, 23, 42, 0.08);
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      padding-bottom: env(safe-area-inset-bottom, 0);
+      padding: 0;
+      margin: 0;
     }
 
     .wheel-wrap {
@@ -211,16 +220,18 @@
     .spin-btn:disabled { opacity: .6; cursor: not-allowed; }
 
     .tab-btn {
-      flex: 1;
+      flex: 1 1 0;
+      height: 100%;
       border: none;
       background: transparent;
       font-family: inherit;
       font-weight: 700;
-      font-size: 0.78rem;
+      font-size: clamp(0.7rem, 2.8vw, 0.85rem);
       color: #64748b;
       cursor: pointer;
-      padding: 0 4px;
+      padding: 0 2px;
       min-width: 0;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -229,12 +240,12 @@
     }
     .tab-btn.active {
       color: #1d4ed8;
-      background: linear-gradient(to top, rgba(37,99,235,.08), transparent);
+      background: linear-gradient(to top, rgba(37,99,235,.1), transparent);
     }
     .tab-btn.active::after {
       content: '';
       position: absolute;
-      top: 0; left: 18%; right: 18%;
+      top: 0; left: 16%; right: 16%;
       height: 3px;
       border-radius: 0 0 3px 3px;
       background: #2563eb;
@@ -269,7 +280,6 @@
       border-color: #2563eb;
     }
 
-    .tab-btn { font-size: 0.78rem; }
   </style>
 </head>
 <body class="font-barlow text-slate-800 antialiased">
