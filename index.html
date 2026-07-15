@@ -46,7 +46,7 @@
     /*
       Mobile: full ngang (flexible 100%)
       10 hàng dọc bằng nhau (1fr × 10):
-      1 Edit · 2 trống · 3–8 vòng xoay · 9 Spin · 10 navbar
+      1 Edit · 2 trống · 3–7 vòng xoay · 8–9 Spin (center) · 10 navbar
     */
     .app {
       width: 100%;
@@ -110,9 +110,9 @@
     }
     .edit-btn:active { transform: scale(0.97); }
 
-    /* Hàng 3–8 — vòng xoay */
+    /* Hàng 3–7 — vòng xoay */
     .row-wheel {
-      grid-row: 3 / 9; /* rows 3,4,5,6,7,8 */
+      grid-row: 3 / 8; /* rows 3,4,5,6,7 */
       align-self: stretch;
       width: 100%;
       display: flex;
@@ -124,9 +124,9 @@
       overflow: hidden;
     }
 
-    /* Hàng 9 — Spin */
+    /* Hàng 8–9 — Spin (chính giữa 2 hàng) */
     .row-spin {
-      grid-row: 9 / 10;
+      grid-row: 8 / 10; /* rows 8 + 9 */
       align-self: stretch;
       width: 100%;
       display: flex;
@@ -289,7 +289,7 @@
       <button id="btnEdit" type="button" class="edit-btn" title="Chỉnh sửa vòng quay">Edit</button>
     </header>
 
-    <!-- Hàng 3–8: vòng xoay -->
+    <!-- Hàng 3–7: vòng xoay -->
     <section class="row-wheel">
       <div class="wheel-wrap" id="wheelBox" role="button" tabindex="0" aria-label="Chạm để quay">
         <!-- Droplet pointer bottom-left -->
@@ -305,7 +305,7 @@
       </div>
     </section>
 
-    <!-- Hàng 9: Spin (giữa mép dưới vòng xoay & navbar) -->
+    <!-- Hàng 8–9: Spin center -->
     <div class="row-spin">
       <button id="btnSpin" type="button" class="spin-btn">Spin</button>
     </div>
@@ -515,7 +515,7 @@
     // ─── Canvas wheel ────────────────────────────────────────
     function resizeCanvas() {
       const parent = wheelBox.parentElement;
-      // Fit square into rows 3–8 zone
+      // Fit square into rows 3–7 zone
       let size = 0;
       if (parent) {
         const pw = parent.clientWidth - 24;
