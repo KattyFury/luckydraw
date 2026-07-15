@@ -30,32 +30,35 @@
     }
 
     /*
-      Layout dọc:
-      Edit (cố định) → vùng vòng quay (flex:1, căn GIỮA thật) → Spin → Navbar
-      Trước đây grid 10 hàng chỉ cho wheel ở nửa trên → nhìn cao.
+      10 hàng bằng nhau (100dvh):
+      Hàng 1      → Edit
+      Hàng 2      → trống
+      Hàng 3–8    → vòng xoay
+      Hàng 9      → Spin (chính giữa mép dưới vòng xoay & navbar)
+      Hàng 10     → navbar
     */
     .app {
       height: 100dvh;
       height: 100svh;
       max-width: 520px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: repeat(10, minmax(0, 1fr));
       padding:
         env(safe-area-inset-top, 0)
         env(safe-area-inset-right, 0)
-        env(safe-area-inset-bottom, 0)
+        0
         env(safe-area-inset-left, 0);
     }
 
-    /* Chỉ Edit (góc phải) */
+    /* Hàng 1 — Edit */
     .row-top {
-      flex: 0 0 auto;
+      grid-row: 1;
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding: 10px 14px 4px;
-      min-height: 52px;
+      padding: 0 14px;
+      min-height: 0;
     }
     .edit-btn {
       display: inline-flex;
@@ -75,56 +78,55 @@
     }
     .edit-btn:active { transform: scale(0.97); }
 
-    /* Vùng giữa: vòng quay căn giữa theo cả chiều dọc + ngang */
+    /* Hàng 3–8 — vòng xoay */
     .row-wheel {
-      flex: 1 1 auto;
-      min-height: 0;
+      grid-row: 3 / 9; /* lines 3 → 9 = rows 3,4,5,6,7,8 */
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 8px 14px;
+      min-height: 0;
+      padding: 0 12px;
       position: relative;
-      container-type: size;
     }
 
-    /* Spin nằm giữa vòng quay và navbar */
+    /* Hàng 9 — Spin: chính giữa khoảng mép dưới vòng xoay ↔ navbar */
     .row-spin {
-      flex: 0 0 auto;
+      grid-row: 9;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 68px;
-      padding: 0 16px 6px;
+      min-height: 0;
+      padding: 0 16px;
       width: 100%;
     }
 
-    /* Navbar hàng chót */
+    /* Hàng 10 — navbar */
     .row-nav {
-      flex: 0 0 auto;
+      grid-row: 10;
       display: flex;
       align-items: stretch;
-      height: 56px;
-      min-height: 56px;
+      min-height: 0;
       border-top: 1px solid rgba(15, 23, 42, 0.08);
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       padding-bottom: env(safe-area-inset-bottom, 0);
-      height: calc(56px + env(safe-area-inset-bottom, 0px));
     }
 
     .wheel-wrap {
       position: relative;
-      /* Vuông vừa khít vùng trống — căn giữa thật, không bị đẩy lên */
-      width: min(100cqw, 100cqh, 92vw, 420px);
-      height: min(100cqw, 100cqh, 92vw, 420px);
+      /* Vuông vừa khít vùng hàng 3–8 */
+      width: min(100%, 100%);
+      height: 100%;
       max-width: 100%;
       max-height: 100%;
       aspect-ratio: 1;
+      /* JS set width=height = min(parentW, parentH) */
       filter: drop-shadow(0 14px 24px rgba(15, 23, 42, 0.16));
       cursor: pointer;
       touch-action: manipulation;
       user-select: none;
+      margin: auto;
     }
     .wheel-wrap.spinning { cursor: wait; }
     .wheel-wrap:active:not(.spinning) { transform: scale(0.985); }
@@ -248,7 +250,7 @@
       <button id="btnEdit" type="button" class="edit-btn" title="Chỉnh sửa vòng quay">Edit</button>
     </header>
 
-    <!-- Vùng giữa màn hình: vòng quay -->
+    <!-- Hàng 3–8: vòng xoay -->
     <section class="row-wheel">
       <div class="wheel-wrap" id="wheelBox" role="button" tabindex="0" aria-label="Chạm để quay">
         <!-- Droplet pointer bottom-left -->
@@ -264,7 +266,7 @@
       </div>
     </section>
 
-    <!-- Spin: giữa vòng quay & navbar -->
+    <!-- Hàng 9: Spin (giữa mép dưới vòng xoay & navbar) -->
     <div class="row-spin">
       <button id="btnSpin" type="button" class="spin-btn">Spin</button>
     </div>
@@ -474,16 +476,15 @@
     // ─── Canvas wheel ────────────────────────────────────────
     function resizeCanvas() {
       const parent = wheelBox.parentElement;
-      // Fit square into the free middle zone (true center on phone)
-      let size = Math.min(wheelBox.clientWidth || 0, wheelBox.clientHeight || 0);
+      // Fit square into rows 3–8 zone
+      let size = 0;
       if (parent) {
-        const pw = parent.clientWidth - 28;
-        const ph = parent.clientHeight - 16;
-        const fit = Math.max(0, Math.min(pw, ph, 420));
-        if (fit > 0) {
-          size = fit;
-          wheelBox.style.width = fit + 'px';
-          wheelBox.style.height = fit + 'px';
+        const pw = parent.clientWidth - 24;
+        const ph = parent.clientHeight;
+        size = Math.max(0, Math.floor(Math.min(pw, ph)));
+        if (size > 0) {
+          wheelBox.style.width = size + 'px';
+          wheelBox.style.height = size + 'px';
         }
       }
       if (!size) return;
