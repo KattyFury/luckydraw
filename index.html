@@ -7,17 +7,17 @@
   <meta name="description" content="LuckyDraw — vòng quay may rủi" />
   <meta name="theme-color" content="#000000" />
   <meta name="application-name" content="LuckyDraw" />
-  <link rel="icon" href="spin.png?v=7" type="image/png" sizes="any" />
-  <link rel="icon" href="spin.png?v=7" type="image/png" sizes="32x32" />
-  <link rel="icon" href="spin.png?v=7" type="image/png" sizes="192x192" />
-  <link rel="shortcut icon" href="spin.png?v=7" type="image/png" />
-  <link rel="apple-touch-icon" href="spin.png?v=7" sizes="180x180" />
-  <link rel="apple-touch-icon" href="spin.png?v=7" sizes="512x512" />
+  <link rel="icon" href="spin.png?v=8" type="image/png" sizes="any" />
+  <link rel="icon" href="spin.png?v=8" type="image/png" sizes="32x32" />
+  <link rel="icon" href="spin.png?v=8" type="image/png" sizes="192x192" />
+  <link rel="shortcut icon" href="spin.png?v=8" type="image/png" />
+  <link rel="apple-touch-icon" href="spin.png?v=8" sizes="180x180" />
+  <link rel="apple-touch-icon" href="spin.png?v=8" sizes="512x512" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LuckyDraw" />
-  <link rel="manifest" href="manifest.webmanifest?v=7" />
+  <link rel="manifest" href="manifest.webmanifest?v=8" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -78,7 +78,7 @@
       }
     }
 
-    /* Hàng 1 — brand + Edit */
+    /* Hàng 1 — chỉ nút Edit */
     .top-bar {
       grid-row: 1 / 2;
       align-self: stretch;
@@ -86,54 +86,31 @@
       min-height: 0;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       padding: 0 16px;
       overflow: hidden;
       z-index: 5;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .brand-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      object-fit: cover;
-      background: #000;
-    }
-
-    .brand-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text);
     }
 
     .edit-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid var(--line);
-      background: transparent;
+      border: none;
+      background: var(--primary);
       border-radius: 999px;
-      padding: 9px 18px;
+      padding: 9px 20px;
       font-family: inherit;
       font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text);
+      font-weight: 700;
+      color: #fff;
       cursor: pointer;
       touch-action: manipulation;
-      transition: background .12s, border-color .12s, transform .12s;
+      transition: background .12s, transform .12s;
     }
     .edit-btn:active {
       transform: scale(0.97);
-      background: var(--surface);
-      border-color: #3a3a3a;
+      background: var(--primary-press);
     }
 
     /* Hàng 3–7 — vòng xoay */
@@ -145,7 +122,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 12px 0 8px;
+      padding: 0 8px;
       position: relative;
       overflow: visible;
       padding-top: 5dvh;
@@ -177,19 +154,19 @@
       background: transparent;
     }
 
-    /* Pointer flat như spin.png — thân trắng, viền hồng, chấm hồng, tip vào tâm */
+    /* Tam giác trắng, tip vào tâm — sát mép trái bánh, không phình lề */
     .pointer {
       position: absolute;
       left: 0;
       top: 50%;
-      width: 48px;
-      height: 48px;
+      width: 16px;
+      height: 20px;
       z-index: 20;
       pointer-events: none;
-      transform: translate(-48%, -50%);
+      transform: translate(-2px, -50%);
     }
     @media (min-width: 400px) {
-      .pointer { width: 54px; height: 54px; }
+      .pointer { width: 18px; height: 22px; }
     }
 
     /* Hàng 8–9 — Spin */
@@ -545,30 +522,15 @@
 <body>
   <div class="app">
     <header class="top-bar">
-      <div class="brand">
-        <img class="brand-icon" src="spin.png?v=7" width="34" height="34" alt="" />
-        <span class="brand-name">LuckyDraw</span>
-      </div>
       <button id="btnEdit" type="button" class="edit-btn" title="Chỉnh sửa vòng quay">Edit</button>
     </header>
 
     <section class="wheel-zone">
       <div class="wheel-wrap" id="wheelBox" role="button" tabindex="0" aria-label="Chạm để quay">
         <div class="pointer" aria-hidden="true">
-          <!-- Flat teardrop như spin.png: trắng + viền hồng + chấm hồng, tip phải -->
-          <svg viewBox="0 0 48 48" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 24
-                     C10 14.6 16.6 8 24 8
-                     C28.5 8 32 10.5 36 15.5
-                     L44 24
-                     L36 32.5
-                     C32 37.5 28.5 40 24 40
-                     C16.6 40 10 33.4 10 24 Z"
-                  fill="#ffffff"
-                  stroke="#ff2d95"
-                  stroke-width="3.5"
-                  stroke-linejoin="round"/>
-            <circle cx="21.5" cy="24" r="7" fill="#ff2d95"/>
+          <!-- Tam giác trắng, tip phải (vào tâm) -->
+          <svg viewBox="0 0 16 20" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="0,0 16,10 0,20" fill="#ffffff"/>
           </svg>
         </div>
         <canvas id="wheel"></canvas>
@@ -769,10 +731,10 @@
       const parent = wheelBox.parentElement;
       let size = 0;
       if (parent) {
-        // Chừa chỗ pointer trái + thu nhỏ bánh (~76%) để chữ/pointer thoáng
-        const pw = parent.clientWidth - 28;
-        const ph = parent.clientHeight - 8;
-        size = Math.max(0, Math.floor(Math.min(pw, ph) * 0.76));
+        // Pointer sát mép — bánh chiếm gần hết zone
+        const pw = parent.clientWidth - 12;
+        const ph = parent.clientHeight - 4;
+        size = Math.max(0, Math.floor(Math.min(pw, ph) * 0.9));
         if (size > 0) {
           wheelBox.style.width = size + 'px';
           wheelBox.style.height = size + 'px';
@@ -795,9 +757,12 @@
       if (!size) return;
       const cx = size / 2;
       const cy = size / 2;
-      const radius = size / 2;
+      const radius = size / 2 - 1;
       const arc = (Math.PI * 2) / n;
       const palette = colorsForCount(n);
+      const hub = Math.max(8, size * 0.032);
+      // Stroke cố định theo CSS px — đều mọi hướng, không phình theo anti-alias
+      const dividerW = Math.max(2, size * 0.008);
 
       ctx.clearRect(0, 0, size, size);
 
@@ -805,45 +770,46 @@
       ctx.translate(cx, cy);
       ctx.rotate(rotation);
 
-      ctx.beginPath();
-      ctx.arc(0, 0, radius - 0.5, 0, Math.PI * 2);
-      ctx.clip();
-
+      // 1) Fill ô
       for (let i = 0; i < n; i++) {
         const start = i * arc - Math.PI / 2;
         const end = start + arc;
-        const color = palette[i];
-
-        // Flat solid segment (giống spin.png)
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.arc(0, 0, radius, start, end);
         ctx.closePath();
-        ctx.fillStyle = color;
+        ctx.fillStyle = palette[i];
         ctx.fill();
+      }
 
-        // Divider đen mỏng giữa các ô
+      // 2) Divider — vẽ 1 lượt, cùng lineWidth, từ mép hub → rim (tránh chồng ở tâm)
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = dividerW;
+      ctx.lineCap = 'butt';
+      ctx.lineJoin = 'miter';
+      for (let i = 0; i < n; i++) {
+        const a = i * arc - Math.PI / 2;
+        const cos = Math.cos(a);
+        const sin = Math.sin(a);
         ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(Math.cos(start) * radius, Math.sin(start) * radius);
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 2;
+        ctx.moveTo(cos * hub, sin * hub);
+        ctx.lineTo(cos * radius, sin * radius);
         ctx.stroke();
+      }
 
+      // 3) Chữ trắng thuần — không stroke/border
+      for (let i = 0; i < n; i++) {
+        const start = i * arc - Math.PI / 2;
         const mid = start + arc / 2;
         ctx.save();
-        // +π: text reads rim → center (pointer left @ π → chữ thắng nằm ngang)
         ctx.rotate(mid + Math.PI);
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#ffffff';
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-        ctx.lineJoin = 'round';
 
         const text = labels[i];
-        const maxW = radius * 0.58;
-        const textX = -(radius - 12);
+        const maxW = radius * 0.56;
+        const textX = -(radius - 14);
         let fontSize = n <= 5 ? 15 : n <= 7 ? 13 : 11;
         ctx.font = `700 ${fontSize}px Inter, system-ui, sans-serif`;
         while (ctx.measureText(text).width > maxW && fontSize > 9) {
@@ -851,36 +817,23 @@
           ctx.font = `700 ${fontSize}px Inter, system-ui, sans-serif`;
         }
 
-        function paintLine(line, x, y) {
-          ctx.strokeText(line, x, y);
-          ctx.fillText(line, x, y);
-        }
-
         if (ctx.measureText(text).width > maxW && text.includes(' ')) {
           const parts = splitLabel(text, ctx, maxW);
           const lineH = fontSize + 2;
           const startY = -((parts.length - 1) * lineH) / 2;
           parts.forEach((line, li) => {
-            paintLine(line, textX, startY + li * lineH);
+            ctx.fillText(line, textX, startY + li * lineH);
           });
         } else {
-          paintLine(text, textX, 0);
+          ctx.fillText(text, textX, 0);
         }
         ctx.restore();
       }
 
-      // Outer rim: 1px đen sạch (không highlight glow)
-      ctx.beginPath();
-      ctx.arc(0, 0, radius - 1, 0, Math.PI * 2);
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Tâm flat — không hub neon
-      const hub = Math.max(6, size * 0.028);
+      // 4) Hub trắng (cùng màu pointer)
       ctx.beginPath();
       ctx.arc(0, 0, hub, 0, Math.PI * 2);
-      ctx.fillStyle = '#000000';
+      ctx.fillStyle = '#ffffff';
       ctx.fill();
 
       ctx.restore();
