@@ -24,22 +24,20 @@
   <style>
     :root {
       --bg: #07070f;
-      --bg-gradient: radial-gradient(ellipse at 50% 0%, #1a1035 0%, #07070f 70%);
-      --neon-cyan: #00f0ff;
-      --neon-pink: #ff2d95;
-      --neon-purple: #b14cff;
+      --bg-gradient: radial-gradient(ellipse at 50% 0%, #2a0a1e 0%, #07070f 70%);
+      /* Brand primary — pink neon (1 hệ cho toàn chrome UI) */
+      --primary: #ff2d95;
+      --primary-deep: #c4006e;
+      --primary-soft: rgba(255, 45, 149, 0.15);
+      --primary-border: rgba(255, 45, 149, 0.45);
+      --primary-glow: 0 0 20px #ff2d95, 0 0 40px #ff2d9566;
+      --primary-btn-glow: 0 0 30px #ff2d95aa, 0 8px 25px #ff2d9544;
+      /* Wheel segment colors only (không dùng cho chrome) */
       --neon-yellow: #ffe600;
-      --neon-green: #39ff14;
-      --neon-orange: #ff6b00;
-      --neon-red: #ff003c;
-      --neon-blue: #00a2ff;
       --text-primary: #ffffff;
       --text-secondary: #a0a0c0;
-      --glass: rgba(15, 15, 30, 0.82);
-      --glass-border: rgba(0, 240, 255, 0.28);
-      --glow-cyan: 0 0 20px #00f0ff, 0 0 40px #00f0ff66;
-      --glow-pink: 0 0 20px #ff2d95, 0 0 40px #ff2d9566;
-      --glow-button: 0 0 30px #00f0ffaa, 0 8px 25px #00f0ff44;
+      --glass: rgba(15, 15, 30, 0.88);
+      --glass-border: rgba(255, 45, 149, 0.32);
       --font: 'Inter', system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
     }
 
@@ -100,8 +98,8 @@
       height: 36px;
       border-radius: 10px;
       object-fit: cover;
-      box-shadow: 0 0 16px #00f0ff55, 0 0 2px #00f0ffaa;
-      border: 1px solid rgba(0, 240, 255, 0.35);
+      box-shadow: 0 0 16px #ff2d9555, 0 0 2px #ff2d95aa;
+      border: 1px solid var(--primary-border);
     }
 
     .brand-name {
@@ -109,22 +107,22 @@
       font-weight: 800;
       letter-spacing: 0.02em;
       color: #fff;
-      text-shadow: 0 0 18px #00f0ff88;
+      text-shadow: 0 0 18px #ff2d9588;
     }
 
     .edit-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 1.5px solid rgba(0, 240, 255, 0.55);
-      background: rgba(0, 240, 255, 0.15);
+      border: 1.5px solid var(--primary-border);
+      background: var(--primary-soft);
       border-radius: 999px;
       padding: 10px 20px;
       font-family: inherit;
       font-size: 0.95rem;
       font-weight: 700;
-      color: var(--neon-cyan);
-      box-shadow: 0 0 14px #00f0ff44;
+      color: var(--primary);
+      box-shadow: 0 0 14px #ff2d9544;
       cursor: pointer;
       touch-action: manipulation;
       transition: transform .12s, opacity .15s, box-shadow .15s;
@@ -156,7 +154,7 @@
       cursor: pointer;
       touch-action: manipulation;
       user-select: none;
-      filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.22));
+      filter: drop-shadow(0 0 18px rgba(255, 45, 149, 0.28));
       z-index: 1;
     }
     .wheel-wrap.spinning { cursor: wait; }
@@ -170,7 +168,7 @@
       background: transparent;
     }
 
-    /* Droplet pointer — bottom-left */
+    /* Droplet pointer — bottom-left (cùng primary hồng) */
     .pointer {
       position: absolute;
       left: 5%;
@@ -181,7 +179,7 @@
       pointer-events: none;
       transform: rotate(48deg) translateY(10px);
       transform-origin: 50% 18%;
-      filter: drop-shadow(0 0 10px #ff003ccc) drop-shadow(0 0 22px #ff003c88);
+      filter: drop-shadow(0 0 10px #ff2d95cc) drop-shadow(0 0 22px #ff2d9588);
     }
     @media (min-width: 400px) {
       .pointer { width: 54px; height: 74px; left: 6%; bottom: 10%; }
@@ -217,21 +215,21 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: #fff;
-      background: linear-gradient(180deg, #00f0ff 0%, #0080ff 100%);
-      box-shadow: var(--glow-button);
+      background: linear-gradient(180deg, #ff4db0 0%, var(--primary) 45%, var(--primary-deep) 100%);
+      box-shadow: var(--primary-btn-glow);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       touch-action: manipulation;
       transition: transform .12s, opacity .15s, box-shadow .15s;
-      text-shadow: 0 1px 2px rgba(0, 0, 40, 0.35);
+      text-shadow: 0 1px 2px rgba(40, 0, 20, 0.4);
     }
     .spin-btn:active:not(:disabled) { transform: scale(0.96); }
     .spin-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      box-shadow: 0 0 12px #00f0ff44;
+      box-shadow: 0 0 12px #ff2d9544;
     }
 
     /* Hàng 10 — navbar đúng 1/10 chiều cao grid, full-bleed */
@@ -251,7 +249,7 @@
       background: rgba(5, 5, 14, 0.96);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border-top: 1px solid rgba(0, 240, 255, 0.18);
+      border-top: 1px solid rgba(255, 45, 149, 0.2);
       padding: 0;
       padding-bottom: env(safe-area-inset-bottom, 0px);
       margin: 0;
@@ -284,9 +282,9 @@
       transition: color .15s;
     }
     .tab-btn.active {
-      color: var(--neon-pink);
+      color: var(--primary);
       text-shadow: 0 0 12px #ff2d95aa;
-      background: linear-gradient(to top, rgba(255, 45, 149, 0.12), transparent);
+      background: linear-gradient(to top, rgba(255, 45, 149, 0.14), transparent);
     }
     .tab-btn.active::after {
       content: '';
@@ -296,7 +294,7 @@
       right: 0;
       height: 3px;
       border-radius: 0;
-      background: var(--neon-pink);
+      background: var(--primary);
       box-shadow: 0 0 10px #ff2d95, 0 0 18px #ff2d9588;
     }
 
@@ -316,7 +314,7 @@
       background: var(--glass);
       border: 1.5px solid var(--glass-border);
       border-radius: 28px;
-      box-shadow: 0 0 40px #00f0ff33, 0 20px 50px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 0 40px #ff2d9533, 0 20px 50px rgba(0, 0, 0, 0.55);
       padding: 2rem 1.5rem 1.5rem;
       text-align: center;
     }
@@ -325,8 +323,8 @@
       font-weight: 800;
       letter-spacing: 0.28em;
       text-transform: uppercase;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 12px #00f0ff88;
+      color: var(--primary);
+      text-shadow: 0 0 12px #ff2d9588;
     }
     .result-text {
       margin-top: 1rem;
@@ -354,8 +352,8 @@
       font-size: 1rem;
       font-weight: 800;
       color: #fff;
-      background: var(--neon-pink);
-      box-shadow: var(--glow-pink);
+      background: linear-gradient(180deg, #ff4db0 0%, var(--primary) 45%, var(--primary-deep) 100%);
+      box-shadow: var(--primary-btn-glow);
       cursor: pointer;
       touch-action: manipulation;
     }
@@ -379,7 +377,7 @@
       border-radius: 24px;
       background: var(--glass);
       border: 1.5px solid var(--glass-border);
-      box-shadow: 0 0 40px #00f0ff22, 0 24px 60px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 40px #ff2d9522, 0 24px 60px rgba(0, 0, 0, 0.6);
     }
     .edit-header {
       position: sticky;
@@ -390,7 +388,7 @@
       justify-content: space-between;
       gap: 12px;
       padding: 16px 20px;
-      border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+      border-bottom: 1px solid rgba(255, 45, 149, 0.18);
       background: rgba(10, 10, 22, 0.95);
       backdrop-filter: blur(10px);
     }
@@ -404,7 +402,7 @@
       margin: 4px 0 0;
       font-size: 0.75rem;
       font-weight: 600;
-      color: var(--neon-cyan);
+      color: var(--primary);
     }
     .btn-ghost {
       border: none;
@@ -454,9 +452,9 @@
     }
     .count-btn.active {
       border-color: transparent;
-      background: var(--neon-cyan);
-      color: #041018;
-      box-shadow: 0 0 16px #00f0ff88;
+      background: linear-gradient(180deg, #ff4db0 0%, var(--primary) 100%);
+      color: #fff;
+      box-shadow: 0 0 16px #ff2d9588;
     }
 
     .seg-list {
@@ -487,7 +485,7 @@
     .seg-input {
       width: 100%;
       border-radius: 12px;
-      border: 1.5px solid rgba(0, 240, 255, 0.2);
+      border: 1.5px solid rgba(255, 45, 149, 0.22);
       background: rgba(0, 0, 0, 0.35);
       padding: 10px 12px;
       font-family: inherit;
@@ -497,8 +495,8 @@
       outline: none;
     }
     .seg-input:focus {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 45, 149, 0.22);
     }
     .seg-input::placeholder { color: #666688; }
 
@@ -508,7 +506,7 @@
       display: flex;
       gap: 8px;
       padding: 16px 20px;
-      border-top: 1px solid rgba(0, 240, 255, 0.15);
+      border-top: 1px solid rgba(255, 45, 149, 0.18);
       background: rgba(10, 10, 22, 0.96);
     }
     .btn-cancel {
@@ -527,13 +525,13 @@
       flex: 1;
       border-radius: 14px;
       border: none;
-      background: var(--neon-cyan);
+      background: linear-gradient(180deg, #ff4db0 0%, var(--primary) 45%, var(--primary-deep) 100%);
       padding: 12px;
       font-family: inherit;
       font-size: 0.875rem;
       font-weight: 800;
-      color: #041018;
-      box-shadow: 0 0 20px #00f0ff66;
+      color: #fff;
+      box-shadow: 0 0 20px #ff2d9566;
       cursor: pointer;
     }
     .btn-cancel:active, .btn-save:active { transform: scale(0.98); }
@@ -564,9 +562,9 @@
         <div class="pointer" aria-hidden="true">
           <svg viewBox="0 0 42 58" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <path d="M21 4 C21 4 4 24 4 34 C4 44.5 11.5 52 21 52 C30.5 52 38 44.5 38 34 C38 24 21 4 21 4 Z"
-                  fill="#1a0508" stroke="#ff003c" stroke-width="1.2"/>
-            <ellipse cx="21" cy="36" rx="9.5" ry="10.5" fill="#ff003c"/>
-            <ellipse cx="18" cy="32" rx="3" ry="2.2" fill="#ff7a9a" opacity=".65"/>
+                  fill="#1a0812" stroke="#ff2d95" stroke-width="1.2"/>
+            <ellipse cx="21" cy="36" rx="9.5" ry="10.5" fill="#ff2d95"/>
+            <ellipse cx="18" cy="32" rx="3" ry="2.2" fill="#ff9ec8" opacity=".7"/>
           </svg>
         </div>
         <canvas id="wheel"></canvas>
@@ -804,7 +802,7 @@
       ctx.translate(cx, cy + Math.max(3, size * 0.012));
       ctx.beginPath();
       ctx.arc(0, 0, shadowR, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(0, 240, 255, 0.18)';
+      ctx.fillStyle = 'rgba(255, 45, 149, 0.2)';
       ctx.filter = 'blur(14px)';
       ctx.fill();
       ctx.filter = 'none';
@@ -879,27 +877,27 @@
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Hub — black gloss + neon red core
+      // Hub — black gloss + primary pink core
       const hub = Math.max(12, size * 0.044);
       ctx.beginPath();
       ctx.arc(0, 0, hub, 0, Math.PI * 2);
       ctx.fillStyle = '#0a0a12';
       ctx.fill();
-      ctx.strokeStyle = 'rgba(255,0,60,0.55)';
+      ctx.strokeStyle = 'rgba(255,45,149,0.55)';
       ctx.lineWidth = 2;
       ctx.stroke();
 
       ctx.beginPath();
       ctx.arc(0, 0, hub * 0.52, 0, Math.PI * 2);
-      ctx.fillStyle = '#ff003c';
-      ctx.shadowColor = '#ff003c';
+      ctx.fillStyle = '#ff2d95';
+      ctx.shadowColor = '#ff2d95';
       ctx.shadowBlur = 10;
       ctx.fill();
       ctx.shadowBlur = 0;
 
       ctx.beginPath();
       ctx.ellipse(-hub * 0.12, -hub * 0.14, hub * 0.18, hub * 0.12, 0, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,140,160,0.55)';
+      ctx.fillStyle = 'rgba(255,158,200,0.55)';
       ctx.fill();
 
       ctx.restore();
