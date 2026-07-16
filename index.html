@@ -66,19 +66,7 @@
       padding: env(safe-area-inset-top, 0px) 0 0 0;
     }
 
-    /* Chỉ desktop/tablet lớn: thu khung giữa màn cho dễ xem */
-    @media (min-width: 768px) {
-      body {
-        background: #0f172a;
-        display: flex;
-        justify-content: center;
-      }
-      .app {
-        width: min(100%, 430px);
-        max-width: 430px;
-        box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 25px 60px rgba(0,0,0,.45);
-      }
-    }
+    /* Desktop/mobile: full viewport — không khóa width kiểu phone strip */
 
     /* Hàng 1 — Edit */
     .row-top {
