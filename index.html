@@ -5,40 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>LuckyDraw</title>
   <meta name="description" content="LuckyDraw — vòng quay may rủi" />
-  <meta name="theme-color" content="#07070f" />
+  <meta name="theme-color" content="#000000" />
   <meta name="application-name" content="LuckyDraw" />
-  <link rel="icon" href="spin.png?v=5" type="image/png" sizes="any" />
-  <link rel="icon" href="spin.png?v=5" type="image/png" sizes="32x32" />
-  <link rel="icon" href="spin.png?v=5" type="image/png" sizes="192x192" />
-  <link rel="shortcut icon" href="spin.png?v=5" type="image/png" />
-  <link rel="apple-touch-icon" href="spin.png?v=5" sizes="180x180" />
-  <link rel="apple-touch-icon" href="spin.png?v=5" sizes="512x512" />
+  <link rel="icon" href="spin.png?v=6" type="image/png" sizes="any" />
+  <link rel="icon" href="spin.png?v=6" type="image/png" sizes="32x32" />
+  <link rel="icon" href="spin.png?v=6" type="image/png" sizes="192x192" />
+  <link rel="shortcut icon" href="spin.png?v=6" type="image/png" />
+  <link rel="apple-touch-icon" href="spin.png?v=6" sizes="180x180" />
+  <link rel="apple-touch-icon" href="spin.png?v=6" sizes="512x512" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LuckyDraw" />
-  <link rel="manifest" href="manifest.webmanifest?v=5" />
+  <link rel="manifest" href="manifest.webmanifest?v=6" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <style>
+    /* Flat luxury — match spin.png: pure black, solid fills, pink accent, no glow */
     :root {
-      --bg: #07070f;
-      --bg-gradient: radial-gradient(ellipse at 50% 0%, #2a0a1e 0%, #07070f 70%);
-      /* Brand primary — pink neon (1 hệ cho toàn chrome UI) */
+      --bg: #000000;
+      --surface: #111111;
+      --surface-2: #1a1a1a;
+      --line: #2a2a2a;
       --primary: #ff2d95;
-      --primary-deep: #c4006e;
-      --primary-soft: rgba(255, 45, 149, 0.15);
-      --primary-border: rgba(255, 45, 149, 0.45);
-      --primary-glow: 0 0 20px #ff2d95, 0 0 40px #ff2d9566;
-      --primary-btn-glow: 0 0 30px #ff2d95aa, 0 8px 25px #ff2d9544;
-      /* Wheel segment colors only (không dùng cho chrome) */
-      --neon-yellow: #ffe600;
-      --text-primary: #ffffff;
-      --text-secondary: #a0a0c0;
-      --glass: rgba(15, 15, 30, 0.88);
-      --glass-border: rgba(255, 45, 149, 0.32);
+      --primary-press: #e02684;
+      --text: #ffffff;
+      --text-muted: #8a8a8a;
+      --text-dim: #5c5c5c;
       --font: 'Inter', system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+      --r-btn: 14px;
+      --r-card: 20px;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -50,7 +47,7 @@
       overflow: hidden;
       font-family: var(--font);
       background: var(--bg);
-      color: var(--text-primary);
+      color: var(--text);
     }
 
     /*
@@ -68,7 +65,6 @@
       grid-template-columns: minmax(0, 1fr);
       overflow: hidden;
       background: var(--bg);
-      background-image: var(--bg-gradient);
       padding-top: env(safe-area-inset-top, 0px);
     }
 
@@ -81,7 +77,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 14px;
+      padding: 0 16px;
       overflow: hidden;
       z-index: 5;
     }
@@ -94,42 +90,43 @@
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
       object-fit: cover;
-      box-shadow: 0 0 16px #ff2d9555, 0 0 2px #ff2d95aa;
-      border: 1px solid var(--primary-border);
+      background: #000;
     }
 
     .brand-name {
       font-size: 1.05rem;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      color: #fff;
-      text-shadow: 0 0 18px #ff2d9588;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
     }
 
     .edit-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 1.5px solid var(--primary-border);
-      background: var(--primary-soft);
+      border: 1px solid var(--line);
+      background: transparent;
       border-radius: 999px;
-      padding: 10px 20px;
+      padding: 9px 18px;
       font-family: inherit;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--primary);
-      box-shadow: 0 0 14px #ff2d9544;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
       cursor: pointer;
       touch-action: manipulation;
-      transition: transform .12s, opacity .15s, box-shadow .15s;
+      transition: background .12s, border-color .12s, transform .12s;
     }
-    .edit-btn:active { transform: scale(0.96); }
+    .edit-btn:active {
+      transform: scale(0.97);
+      background: var(--surface);
+      border-color: #3a3a3a;
+    }
 
-    /* Hàng 3–7 — vòng xoay (5 hàng). Tâm bánh ≈ ranh giới hàng 5|6 (50% màn) */
+    /* Hàng 3–7 — vòng xoay */
     .wheel-zone {
       grid-row: 3 / 8;
       align-self: stretch;
@@ -138,10 +135,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 10px 0 6px;
+      padding: 0 12px 0 8px;
       position: relative;
       overflow: visible;
-      /* zone 20–70% → tâm 45%; +5dvh → ~50% (giữa hàng 5–6) */
       padding-top: 5dvh;
       box-sizing: border-box;
     }
@@ -158,7 +154,6 @@
       cursor: pointer;
       touch-action: manipulation;
       user-select: none;
-      filter: drop-shadow(0 0 18px rgba(255, 45, 149, 0.28));
       z-index: 1;
     }
     .wheel-wrap.spinning { cursor: wait; }
@@ -172,24 +167,22 @@
       background: transparent;
     }
 
-    /* Droplet pointer — trái giữa bánh (9 giờ), tip hướng vào tâm → chữ thắng nằm ngang dễ đọc */
+    /* Pointer flat như spin.png — teardrop hồng, lõi đen, tip vào tâm */
     .pointer {
       position: absolute;
       left: 0;
       top: 50%;
-      width: 44px;
-      height: 60px;
+      width: 46px;
+      height: 46px;
       z-index: 20;
       pointer-events: none;
-      transform: translate(-42%, -50%) rotate(90deg);
-      transform-origin: 50% 50%;
-      filter: drop-shadow(0 0 10px #ff2d95cc) drop-shadow(0 0 22px #ff2d9588);
+      transform: translate(-48%, -50%);
     }
     @media (min-width: 400px) {
-      .pointer { width: 50px; height: 68px; }
+      .pointer { width: 52px; height: 52px; }
     }
 
-    /* Hàng 8–9 — Spin (chính giữa 2 hàng) */
+    /* Hàng 8–9 — Spin */
     .spin-zone {
       grid-row: 8 / 10;
       align-self: stretch;
@@ -212,31 +205,31 @@
       max-height: 64px;
       flex-shrink: 0;
       border: none;
-      border-radius: 16px;
+      border-radius: var(--r-btn);
       font-family: inherit;
-      font-weight: 900;
-      font-size: clamp(1.05rem, 4.2vw, 1.35rem);
-      letter-spacing: 0.1em;
+      font-weight: 800;
+      font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #fff;
-      background: linear-gradient(180deg, #ff4db0 0%, var(--primary) 45%, var(--primary-deep) 100%);
-      box-shadow: var(--primary-btn-glow);
+      background: var(--primary);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       touch-action: manipulation;
-      transition: transform .12s, opacity .15s, box-shadow .15s;
-      text-shadow: 0 1px 2px rgba(40, 0, 20, 0.4);
+      transition: transform .12s, opacity .15s, background .12s;
     }
-    .spin-btn:active:not(:disabled) { transform: scale(0.96); }
+    .spin-btn:active:not(:disabled) {
+      transform: scale(0.97);
+      background: var(--primary-press);
+    }
     .spin-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: not-allowed;
-      box-shadow: 0 0 12px #ff2d9544;
     }
 
-    /* Hàng 10 — navbar đúng 1/10 chiều cao grid, full-bleed */
+    /* Hàng 10 — navbar */
     .tab-bar {
       grid-row: 10 / 11;
       align-self: stretch;
@@ -250,10 +243,8 @@
       align-items: stretch;
       justify-content: stretch;
       overflow: hidden;
-      background: rgba(5, 5, 14, 0.96);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-top: 1px solid rgba(255, 45, 149, 0.2);
+      background: var(--bg);
+      border-top: 1px solid var(--line);
       padding: 0;
       padding-bottom: env(safe-area-inset-bottom, 0px);
       margin: 0;
@@ -272,9 +263,9 @@
       border-radius: 0;
       background: transparent;
       font-family: inherit;
-      font-weight: 700;
+      font-weight: 600;
       font-size: clamp(0.7rem, 2.8vw, 0.85rem);
-      color: var(--text-secondary);
+      color: var(--text-dim);
       cursor: pointer;
       padding: 0;
       margin: 0;
@@ -283,92 +274,87 @@
       justify-content: center;
       position: relative;
       touch-action: manipulation;
-      transition: color .15s;
+      transition: color .12s;
     }
     .tab-btn.active {
       color: var(--primary);
-      text-shadow: 0 0 12px #ff2d95aa;
-      background: linear-gradient(to top, rgba(255, 45, 149, 0.14), transparent);
     }
     .tab-btn.active::after {
       content: '';
       position: absolute;
       top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      border-radius: 0;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      border-radius: 1px;
       background: var(--primary);
-      box-shadow: 0 0 10px #ff2d95, 0 0 18px #ff2d9588;
     }
 
     /* ── Modals ── */
     .modal-backdrop {
-      background: rgba(0, 0, 0, 0.72);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.78);
     }
 
     .result-modal {
-      animation: fadeIn .25s ease both;
+      animation: fadeIn .2s ease both;
     }
     .result-card {
-      animation: popIn .45s cubic-bezier(.2, 1.25, .4, 1) both;
+      animation: popIn .35s cubic-bezier(.2, 1.1, .4, 1) both;
       width: min(92vw, 400px);
-      background: var(--glass);
-      border: 1.5px solid var(--glass-border);
-      border-radius: 28px;
-      box-shadow: 0 0 40px #ff2d9533, 0 20px 50px rgba(0, 0, 0, 0.55);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r-card);
       padding: 2rem 1.5rem 1.5rem;
       text-align: center;
     }
     .result-label {
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.28em;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--primary);
-      text-shadow: 0 0 12px #ff2d9588;
     }
     .result-text {
       margin-top: 1rem;
       font-size: clamp(1.75rem, 7vw, 2.25rem);
-      font-weight: 900;
+      font-weight: 800;
       line-height: 1.15;
-      color: #fff;
+      color: var(--text);
       word-break: break-word;
       padding: 0 4px;
     }
     .result-sub {
       margin-top: 0.75rem;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--neon-yellow);
-      text-shadow: 0 0 14px #ffe60088;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
     }
     .btn-ok {
       margin-top: 1.75rem;
       width: 100%;
       border: none;
-      border-radius: 16px;
+      border-radius: var(--r-btn);
       padding: 14px 16px;
       font-family: inherit;
       font-size: 1rem;
-      font-weight: 800;
+      font-weight: 700;
       color: #fff;
-      background: linear-gradient(180deg, #ff4db0 0%, var(--primary) 45%, var(--primary-deep) 100%);
-      box-shadow: var(--primary-btn-glow);
+      background: var(--primary);
       cursor: pointer;
       touch-action: manipulation;
+      transition: background .12s, transform .12s;
     }
-    .btn-ok:active { transform: scale(0.98); }
+    .btn-ok:active {
+      transform: scale(0.98);
+      background: var(--primary-press);
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
     @keyframes popIn {
-      from { opacity: 0; transform: scale(.82) translateY(18px); }
+      from { opacity: 0; transform: scale(.94) translateY(10px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
@@ -378,10 +364,9 @@
       max-width: 28rem;
       max-height: 90dvh;
       overflow-y: auto;
-      border-radius: 24px;
-      background: var(--glass);
-      border: 1.5px solid var(--glass-border);
-      box-shadow: 0 0 40px #ff2d9522, 0 24px 60px rgba(0, 0, 0, 0.6);
+      border-radius: var(--r-card);
+      background: var(--surface);
+      border: 1px solid var(--line);
     }
     .edit-header {
       position: sticky;
@@ -392,34 +377,33 @@
       justify-content: space-between;
       gap: 12px;
       padding: 16px 20px;
-      border-bottom: 1px solid rgba(255, 45, 149, 0.18);
-      background: rgba(10, 10, 22, 0.95);
-      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
     }
     .edit-header h2 {
       margin: 0;
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
     }
     .edit-header p {
       margin: 4px 0 0;
       font-size: 0.75rem;
       font-weight: 600;
-      color: var(--primary);
+      color: var(--text-muted);
     }
     .btn-ghost {
       border: none;
       background: transparent;
-      color: var(--text-secondary);
+      color: var(--text-muted);
       font-family: inherit;
       font-size: 0.875rem;
-      font-weight: 700;
+      font-weight: 600;
       padding: 8px 12px;
       border-radius: 10px;
       cursor: pointer;
     }
-    .btn-ghost:active { background: rgba(255, 255, 255, 0.06); }
+    .btn-ghost:active { background: var(--surface-2); color: var(--text); }
 
     .edit-body {
       padding: 20px;
@@ -430,9 +414,9 @@
     .field-label {
       display: block;
       margin-bottom: 10px;
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
     }
 
     .count-picker {
@@ -443,22 +427,21 @@
     .count-btn {
       height: 40px;
       width: 40px;
-      border-radius: 12px;
+      border-radius: 10px;
       font-family: inherit;
       font-size: 0.875rem;
-      font-weight: 800;
+      font-weight: 700;
       cursor: pointer;
       touch-action: manipulation;
-      transition: background .15s, color .15s, box-shadow .15s, border-color .15s;
-      border: 1.5px solid rgba(160, 160, 192, 0.25);
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text-secondary);
+      transition: background .12s, color .12s, border-color .12s;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text-muted);
     }
     .count-btn.active {
-      border-color: transparent;
-      background: linear-gradient(180deg, #ff4db0 0%, var(--primary) 100%);
+      border-color: var(--primary);
+      background: var(--primary);
       color: #fff;
-      box-shadow: 0 0 16px #ff2d9588;
     }
 
     .seg-list {
@@ -475,34 +458,32 @@
       width: 20px;
       text-align: center;
       font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--text-secondary);
+      font-weight: 600;
+      color: var(--text-dim);
     }
     .seg-swatch {
-      height: 32px;
-      width: 32px;
+      height: 28px;
+      width: 28px;
       flex-shrink: 0;
       border-radius: 50%;
-      box-shadow: 0 0 10px currentColor;
-      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
     .seg-input {
       width: 100%;
-      border-radius: 12px;
-      border: 1.5px solid rgba(255, 45, 149, 0.22);
-      background: rgba(0, 0, 0, 0.35);
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--bg);
       padding: 10px 12px;
       font-family: inherit;
       font-size: 0.875rem;
-      font-weight: 600;
-      color: #fff;
+      font-weight: 500;
+      color: var(--text);
       outline: none;
     }
     .seg-input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 45, 149, 0.22);
     }
-    .seg-input::placeholder { color: #666688; }
+    .seg-input::placeholder { color: var(--text-dim); }
 
     .edit-footer {
       position: sticky;
@@ -510,35 +491,35 @@
       display: flex;
       gap: 8px;
       padding: 16px 20px;
-      border-top: 1px solid rgba(255, 45, 149, 0.18);
-      background: rgba(10, 10, 22, 0.96);
+      border-top: 1px solid var(--line);
+      background: var(--surface);
     }
     .btn-cancel {
       flex: 1;
-      border-radius: 14px;
-      border: 1.5px solid rgba(160, 160, 192, 0.35);
+      border-radius: var(--r-btn);
+      border: 1px solid var(--line);
       background: transparent;
       padding: 12px;
       font-family: inherit;
       font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--text-secondary);
+      font-weight: 600;
+      color: var(--text-muted);
       cursor: pointer;
     }
     .btn-save {
       flex: 1;
-      border-radius: 14px;
+      border-radius: var(--r-btn);
       border: none;
-      background: linear-gradient(180deg, #ff4db0 0%, var(--primary) 45%, var(--primary-deep) 100%);
+      background: var(--primary);
       padding: 12px;
       font-family: inherit;
       font-size: 0.875rem;
-      font-weight: 800;
+      font-weight: 700;
       color: #fff;
-      box-shadow: 0 0 20px #ff2d9566;
       cursor: pointer;
     }
     .btn-cancel:active, .btn-save:active { transform: scale(0.98); }
+    .btn-save:active { background: var(--primary-press); }
 
     .hidden { display: none !important; }
     .flex { display: flex !important; }
@@ -555,7 +536,7 @@
   <div class="app">
     <header class="top-bar">
       <div class="brand">
-        <img class="brand-icon" src="spin.png?v=5" width="36" height="36" alt="" />
+        <img class="brand-icon" src="spin.png?v=6" width="34" height="34" alt="" />
         <span class="brand-name">LuckyDraw</span>
       </div>
       <button id="btnEdit" type="button" class="edit-btn" title="Chỉnh sửa vòng quay">Edit</button>
@@ -564,11 +545,17 @@
     <section class="wheel-zone">
       <div class="wheel-wrap" id="wheelBox" role="button" tabindex="0" aria-label="Chạm để quay">
         <div class="pointer" aria-hidden="true">
-          <svg viewBox="0 0 42 58" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 4 C21 4 4 24 4 34 C4 44.5 11.5 52 21 52 C30.5 52 38 44.5 38 34 C38 24 21 4 21 4 Z"
-                  fill="#1a0812" stroke="#ff2d95" stroke-width="1.2"/>
-            <ellipse cx="21" cy="36" rx="9.5" ry="10.5" fill="#ff2d95"/>
-            <ellipse cx="18" cy="32" rx="3" ry="2.2" fill="#ff9ec8" opacity=".7"/>
+          <!-- Flat teardrop như spin.png: hồng solid + lỗ đen, tip phải (vào tâm) -->
+          <svg viewBox="0 0 48 48" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 24
+                     C10 14.6 16.6 8 24 8
+                     C28.5 8 32 10.5 36 15.5
+                     L44 24
+                     L36 32.5
+                     C32 37.5 28.5 40 24 40
+                     C16.6 40 10 33.4 10 24 Z"
+                  fill="#ff2d95"/>
+            <circle cx="22" cy="24" r="8.5" fill="#000000"/>
           </svg>
         </div>
         <canvas id="wheel"></canvas>
@@ -624,17 +611,17 @@
   <script>
     // ─── Constants ───────────────────────────────────────────
     const STORAGE_KEY = 'luckydraw_v3';
-    // 9 màu neon — max 9 ô
+    // Flat palette khớp spin.png (+ màu solid thêm khi >5 ô) — không neon
     const COLORS = [
-      '#00a2ff', // blue
-      '#ff003c', // red
-      '#b14cff', // purple
-      '#ffe600', // yellow
-      '#39ff14', // green
-      '#ff6b00', // orange
-      '#ff2d95', // pink
-      '#00f0ff', // cyan
-      '#7c3aed', // deep violet (9th)
+      '#FF3B30', // red
+      '#34C759', // green
+      '#AF52DE', // purple
+      '#FFD60A', // yellow
+      '#007AFF', // blue
+      '#FF9500', // orange
+      '#FF2D95', // pink (brand)
+      '#5AC8FA', // light blue
+      '#8E8E93', // neutral gray (9th)
     ];
 
     function colorsForCount(n) {
@@ -801,18 +788,6 @@
 
       ctx.clearRect(0, 0, size, size);
 
-      // Soft circular glow under wheel (cheap — one blur)
-      const shadowR = radius * 0.94;
-      ctx.save();
-      ctx.translate(cx, cy + Math.max(3, size * 0.012));
-      ctx.beginPath();
-      ctx.arc(0, 0, shadowR, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255, 45, 149, 0.2)';
-      ctx.filter = 'blur(14px)';
-      ctx.fill();
-      ctx.filter = 'none';
-      ctx.restore();
-
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(rotation);
@@ -826,6 +801,7 @@
         const end = start + arc;
         const color = palette[i];
 
+        // Flat solid segment (giống spin.png)
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.arc(0, 0, radius, start, end);
@@ -833,13 +809,12 @@
         ctx.fillStyle = color;
         ctx.fill();
 
-        // thin light edge between segments
+        // Divider đen mỏng giữa các ô
         ctx.beginPath();
         ctx.moveTo(0, 0);
-        ctx.arc(0, 0, radius, start, end);
-        ctx.closePath();
-        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-        ctx.lineWidth = 1.5;
+        ctx.lineTo(Math.cos(start) * radius, Math.sin(start) * radius);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
         ctx.stroke();
 
         const mid = start + arc / 2;
@@ -848,61 +823,51 @@
         ctx.rotate(mid + Math.PI);
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillStyle = '#fff';
-        ctx.shadowColor = 'rgba(0,0,0,0.55)';
-        ctx.shadowBlur = 3;
-        ctx.shadowOffsetY = 1;
+        ctx.fillStyle = '#ffffff';
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+        ctx.lineJoin = 'round';
 
         const text = labels[i];
         const maxW = radius * 0.58;
         const textX = -(radius - 12);
-        let fontSize = n <= 5 ? 16 : n <= 7 ? 14 : 12;
-        ctx.font = `800 ${fontSize}px Inter, system-ui, sans-serif`;
+        let fontSize = n <= 5 ? 15 : n <= 7 ? 13 : 11;
+        ctx.font = `700 ${fontSize}px Inter, system-ui, sans-serif`;
         while (ctx.measureText(text).width > maxW && fontSize > 9) {
           fontSize -= 1;
-          ctx.font = `800 ${fontSize}px Inter, system-ui, sans-serif`;
+          ctx.font = `700 ${fontSize}px Inter, system-ui, sans-serif`;
         }
+
+        function paintLine(line, x, y) {
+          ctx.strokeText(line, x, y);
+          ctx.fillText(line, x, y);
+        }
+
         if (ctx.measureText(text).width > maxW && text.includes(' ')) {
           const parts = splitLabel(text, ctx, maxW);
           const lineH = fontSize + 2;
           const startY = -((parts.length - 1) * lineH) / 2;
           parts.forEach((line, li) => {
-            ctx.fillText(line, textX, startY + li * lineH);
+            paintLine(line, textX, startY + li * lineH);
           });
         } else {
-          ctx.fillText(text, textX, 0);
+          paintLine(text, textX, 0);
         }
         ctx.restore();
       }
 
-      // Outer rim highlight
+      // Outer rim: 1px đen sạch (không highlight glow)
       ctx.beginPath();
-      ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+      ctx.arc(0, 0, radius - 1, 0, Math.PI * 2);
+      ctx.strokeStyle = '#000000';
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Hub — black gloss + primary pink core
-      const hub = Math.max(12, size * 0.044);
+      // Tâm flat — không hub neon
+      const hub = Math.max(6, size * 0.028);
       ctx.beginPath();
       ctx.arc(0, 0, hub, 0, Math.PI * 2);
-      ctx.fillStyle = '#0a0a12';
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255,45,149,0.55)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(0, 0, hub * 0.52, 0, Math.PI * 2);
-      ctx.fillStyle = '#ff2d95';
-      ctx.shadowColor = '#ff2d95';
-      ctx.shadowBlur = 10;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-
-      ctx.beginPath();
-      ctx.ellipse(-hub * 0.12, -hub * 0.14, hub * 0.18, hub * 0.12, 0, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,158,200,0.55)';
+      ctx.fillStyle = '#000000';
       ctx.fill();
 
       ctx.restore();
