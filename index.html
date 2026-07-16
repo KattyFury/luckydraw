@@ -123,15 +123,15 @@
     }
     .edit-btn:active { transform: scale(0.96); }
 
-    /* ── Wheel zone (~55–60%) ── */
+    /* ── Wheel zone (chiếm phần lớn giữa màn) ── */
     .wheel-zone {
-      flex: 1 1 auto;
+      flex: 3 1 0;
       min-height: 0;
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px 24px;
+      padding: 4px 24px 0;
       position: relative;
     }
 
@@ -175,13 +175,15 @@
       .pointer { width: 54px; height: 74px; left: 6%; bottom: 10%; }
     }
 
-    /* ── Spin CTA ── */
+    /* ── Spin CTA: dải riêng, nút giữa dải — không dính navbar ── */
     .spin-zone {
-      flex: 0 0 auto;
+      flex: 1 1 0;
+      min-height: 108px;
+      max-height: 160px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 16px 14px;
+      padding: 12px 16px 28px;
       z-index: 4;
     }
 
