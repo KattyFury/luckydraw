@@ -154,19 +154,19 @@
       background: transparent;
     }
 
-    /* Tam giác trắng, tip vào tâm — sát mép trái bánh, không phình lề */
+    /* Tam giác trắng, tip vào tâm — sát mép trái bánh (~x3 so với trước) */
     .pointer {
       position: absolute;
       left: 0;
       top: 50%;
-      width: 16px;
-      height: 20px;
+      width: 48px;
+      height: 60px;
       z-index: 20;
       pointer-events: none;
-      transform: translate(-2px, -50%);
+      transform: translate(-6px, -50%);
     }
     @media (min-width: 400px) {
-      .pointer { width: 18px; height: 22px; }
+      .pointer { width: 54px; height: 66px; }
     }
 
     /* Hàng 8–9 — Spin */
@@ -797,7 +797,7 @@
         ctx.stroke();
       }
 
-      // 3) Chữ trắng thuần — không stroke/border
+      // 3) Chữ trắng + stroke đen mỏng (đọc được trên mọi màu ô)
       for (let i = 0; i < n; i++) {
         const start = i * arc - Math.PI / 2;
         const mid = start + arc / 2;
@@ -806,6 +806,10 @@
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+        ctx.lineWidth = Math.max(2, size * 0.006);
+        ctx.lineJoin = 'round';
+        ctx.miterLimit = 2;
 
         const text = labels[i];
         const maxW = radius * 0.56;
@@ -817,15 +821,20 @@
           ctx.font = `700 ${fontSize}px Inter, system-ui, sans-serif`;
         }
 
+        function paintLine(line, x, y) {
+          ctx.strokeText(line, x, y);
+          ctx.fillText(line, x, y);
+        }
+
         if (ctx.measureText(text).width > maxW && text.includes(' ')) {
           const parts = splitLabel(text, ctx, maxW);
           const lineH = fontSize + 2;
           const startY = -((parts.length - 1) * lineH) / 2;
           parts.forEach((line, li) => {
-            ctx.fillText(line, textX, startY + li * lineH);
+            paintLine(line, textX, startY + li * lineH);
           });
         } else {
-          ctx.fillText(text, textX, 0);
+          paintLine(text, textX, 0);
         }
         ctx.restore();
       }
