@@ -55,28 +55,36 @@
       color: var(--text-primary);
     }
 
+    /*
+      10 hàng dọc bằng nhau (1fr × 10) — KHÔNG phá bố cục này:
+      1 top/Edit · 2 trống · 3–7 vòng xoay · 8–9 Spin · 10 navbar
+    */
     .app {
       width: 100%;
       max-width: 100%;
       height: 100%;
       height: 100dvh;
       min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: repeat(10, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1fr);
       overflow: hidden;
       background: var(--bg);
       background-image: var(--bg-gradient);
       padding-top: env(safe-area-inset-top, 0px);
     }
 
-    /* ── Top bar ── */
+    /* Hàng 1 — brand + Edit */
     .top-bar {
-      flex: 0 0 auto;
+      grid-row: 1 / 2;
+      align-self: stretch;
+      width: 100%;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 16px 8px;
-      min-height: 52px;
+      padding: 0 14px;
+      overflow: hidden;
       z-index: 5;
     }
 
@@ -123,29 +131,33 @@
     }
     .edit-btn:active { transform: scale(0.96); }
 
-    /* ── Wheel zone (chiếm phần lớn giữa màn) ── */
+    /* Hàng 3–7 — vòng xoay (5 hàng) */
     .wheel-zone {
-      flex: 3 1 0;
-      min-height: 0;
+      grid-row: 3 / 8;
+      align-self: stretch;
       width: 100%;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px 24px 0;
+      padding: 0 12px;
       position: relative;
+      overflow: hidden;
     }
 
     .wheel-wrap {
       position: relative;
       width: min(100%, 100%);
-      height: auto;
-      aspect-ratio: 1;
+      height: 100%;
+      max-width: 100%;
       max-height: 100%;
+      aspect-ratio: 1;
       margin: auto;
       cursor: pointer;
       touch-action: manipulation;
       user-select: none;
       filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.22));
+      z-index: 1;
     }
     .wheel-wrap.spinning { cursor: wait; }
     .wheel-wrap:active:not(.spinning) { transform: scale(0.985); }
@@ -175,27 +187,34 @@
       .pointer { width: 54px; height: 74px; left: 6%; bottom: 10%; }
     }
 
-    /* ── Spin CTA: dải riêng, nút giữa dải — không dính navbar ── */
+    /* Hàng 8–9 — Spin (chính giữa 2 hàng) */
     .spin-zone {
-      flex: 1 1 0;
-      min-height: 108px;
-      max-height: 160px;
+      grid-row: 8 / 10;
+      align-self: stretch;
+      width: 100%;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 16px 28px;
-      z-index: 4;
+      padding: 0 16px;
+      overflow: visible;
+      background: transparent;
+      position: relative;
+      z-index: 2;
     }
 
     .spin-btn {
-      width: min(70%, 320px);
-      height: 68px;
+      width: min(72%, 280px);
+      height: min(56px, 70%);
+      min-height: 48px;
+      max-height: 64px;
+      flex-shrink: 0;
       border: none;
-      border-radius: 20px;
+      border-radius: 16px;
       font-family: inherit;
       font-weight: 900;
-      font-size: 1.4rem;
-      letter-spacing: 0.12em;
+      font-size: clamp(1.05rem, 4.2vw, 1.35rem);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: #fff;
       background: linear-gradient(180deg, #00f0ff 0%, #0080ff 100%);
@@ -215,34 +234,47 @@
       box-shadow: 0 0 12px #00f0ff44;
     }
 
-    /* ── Bottom tabs ── */
+    /* Hàng 10 — navbar đúng 1/10 chiều cao grid, full-bleed */
     .tab-bar {
-      flex: 0 0 auto;
+      grid-row: 10 / 11;
+      align-self: stretch;
+      justify-self: stretch;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      max-height: none;
       display: flex;
       flex-direction: row;
       align-items: stretch;
-      width: 100%;
-      min-height: 56px;
-      background: rgba(5, 5, 14, 0.92);
+      justify-content: stretch;
+      overflow: hidden;
+      background: rgba(5, 5, 14, 0.96);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-top: 1px solid rgba(0, 240, 255, 0.18);
+      padding: 0;
       padding-bottom: env(safe-area-inset-bottom, 0px);
+      margin: 0;
+      box-sizing: border-box;
+      position: relative;
       z-index: 6;
     }
 
     .tab-btn {
       flex: 1 1 0;
+      height: auto;
+      align-self: stretch;
       min-width: 0;
+      min-height: 0;
       border: none;
       border-radius: 0;
       background: transparent;
       font-family: inherit;
       font-weight: 700;
-      font-size: clamp(0.68rem, 2.6vw, 0.82rem);
+      font-size: clamp(0.7rem, 2.8vw, 0.85rem);
       color: var(--text-secondary);
       cursor: pointer;
-      padding: 12px 2px;
+      padding: 0;
       margin: 0;
       display: flex;
       align-items: center;
@@ -254,15 +286,16 @@
     .tab-btn.active {
       color: var(--neon-pink);
       text-shadow: 0 0 12px #ff2d95aa;
+      background: linear-gradient(to top, rgba(255, 45, 149, 0.12), transparent);
     }
     .tab-btn.active::after {
       content: '';
       position: absolute;
       top: 0;
-      left: 12%;
-      right: 12%;
+      left: 0;
+      right: 0;
       height: 3px;
-      border-radius: 0 0 3px 3px;
+      border-radius: 0;
       background: var(--neon-pink);
       box-shadow: 0 0 10px #ff2d95, 0 0 18px #ff2d9588;
     }
@@ -734,8 +767,8 @@
       const parent = wheelBox.parentElement;
       let size = 0;
       if (parent) {
-        const pw = parent.clientWidth - 48; // padding 24×2
-        const ph = parent.clientHeight - 8;
+        const pw = parent.clientWidth - 24;
+        const ph = parent.clientHeight;
         size = Math.max(0, Math.floor(Math.min(pw, ph)));
         if (size > 0) {
           wheelBox.style.width = size + 'px';
