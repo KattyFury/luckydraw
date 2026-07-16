@@ -7,17 +7,17 @@
   <meta name="description" content="LuckyDraw — vòng quay may rủi" />
   <meta name="theme-color" content="#000000" />
   <meta name="application-name" content="LuckyDraw" />
-  <link rel="icon" href="spin.png?v=6" type="image/png" sizes="any" />
-  <link rel="icon" href="spin.png?v=6" type="image/png" sizes="32x32" />
-  <link rel="icon" href="spin.png?v=6" type="image/png" sizes="192x192" />
-  <link rel="shortcut icon" href="spin.png?v=6" type="image/png" />
-  <link rel="apple-touch-icon" href="spin.png?v=6" sizes="180x180" />
-  <link rel="apple-touch-icon" href="spin.png?v=6" sizes="512x512" />
+  <link rel="icon" href="spin.png?v=7" type="image/png" sizes="any" />
+  <link rel="icon" href="spin.png?v=7" type="image/png" sizes="32x32" />
+  <link rel="icon" href="spin.png?v=7" type="image/png" sizes="192x192" />
+  <link rel="shortcut icon" href="spin.png?v=7" type="image/png" />
+  <link rel="apple-touch-icon" href="spin.png?v=7" sizes="180x180" />
+  <link rel="apple-touch-icon" href="spin.png?v=7" sizes="512x512" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LuckyDraw" />
-  <link rel="manifest" href="manifest.webmanifest?v=6" />
+  <link rel="manifest" href="manifest.webmanifest?v=7" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -177,19 +177,19 @@
       background: transparent;
     }
 
-    /* Pointer flat như spin.png — teardrop hồng, lõi đen, tip vào tâm */
+    /* Pointer flat như spin.png — thân trắng, viền hồng, chấm hồng, tip vào tâm */
     .pointer {
       position: absolute;
       left: 0;
       top: 50%;
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       z-index: 20;
       pointer-events: none;
       transform: translate(-48%, -50%);
     }
     @media (min-width: 400px) {
-      .pointer { width: 52px; height: 52px; }
+      .pointer { width: 54px; height: 54px; }
     }
 
     /* Hàng 8–9 — Spin */
@@ -546,7 +546,7 @@
   <div class="app">
     <header class="top-bar">
       <div class="brand">
-        <img class="brand-icon" src="spin.png?v=6" width="34" height="34" alt="" />
+        <img class="brand-icon" src="spin.png?v=7" width="34" height="34" alt="" />
         <span class="brand-name">LuckyDraw</span>
       </div>
       <button id="btnEdit" type="button" class="edit-btn" title="Chỉnh sửa vòng quay">Edit</button>
@@ -555,7 +555,7 @@
     <section class="wheel-zone">
       <div class="wheel-wrap" id="wheelBox" role="button" tabindex="0" aria-label="Chạm để quay">
         <div class="pointer" aria-hidden="true">
-          <!-- Flat teardrop như spin.png: hồng solid + lỗ đen, tip phải (vào tâm) -->
+          <!-- Flat teardrop như spin.png: trắng + viền hồng + chấm hồng, tip phải -->
           <svg viewBox="0 0 48 48" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 24
                      C10 14.6 16.6 8 24 8
@@ -564,8 +564,11 @@
                      L36 32.5
                      C32 37.5 28.5 40 24 40
                      C16.6 40 10 33.4 10 24 Z"
-                  fill="#ff2d95"/>
-            <circle cx="22" cy="24" r="8.5" fill="#000000"/>
+                  fill="#ffffff"
+                  stroke="#ff2d95"
+                  stroke-width="3.5"
+                  stroke-linejoin="round"/>
+            <circle cx="21.5" cy="24" r="7" fill="#ff2d95"/>
           </svg>
         </div>
         <canvas id="wheel"></canvas>
