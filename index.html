@@ -613,8 +613,9 @@
 
         const mid = start + arc / 2;
         ctx.save();
-        ctx.rotate(mid);
-        ctx.textAlign = 'right';
+        // +π: chữ đọc từ mép ngoài → tâm (dễ đọc khi pointer bên trái)
+        ctx.rotate(mid + Math.PI);
+        ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#fff';
         ctx.shadowColor = 'rgba(0,0,0,0.28)';
@@ -623,6 +624,8 @@
 
         const text = labels[i];
         const maxW = radius * 0.56;
+        // Sau khi +π: mép ngoài nằm ở x âm
+        const textX = -(radius - 14);
         let fontSize = n <= 5 ? 15 : n <= 7 ? 13 : 11;
         ctx.font = `800 ${fontSize}px Barlow, system-ui, sans-serif`;
         while (ctx.measureText(text).width > maxW && fontSize > 9) {
@@ -634,10 +637,10 @@
           const lineH = fontSize + 2;
           const startY = -((parts.length - 1) * lineH) / 2;
           parts.forEach((line, li) => {
-            ctx.fillText(line, radius - 14, startY + li * lineH);
+            ctx.fillText(line, textX, startY + li * lineH);
           });
         } else {
-          ctx.fillText(text, radius - 14, 0);
+          ctx.fillText(text, textX, 0);
         }
         ctx.restore();
       }
