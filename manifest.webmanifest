@@ -1,21 +1,21 @@
 {
   "name": "LuckyDraw",
   "short_name": "LuckyDraw",
-  "description": "LuckyDraw",
+  "description": "LuckyDraw — vòng quay may rủi",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2563EB",
+  "background_color": "#07070f",
+  "theme_color": "#07070f",
   "icons": [
     {
-      "src": "spin.png?v=4",
+      "src": "spin.png?v=5",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "spin.png?v=4",
+      "src": "spin.png?v=5",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

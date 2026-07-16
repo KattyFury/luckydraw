@@ -4,281 +4,328 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>LuckyDraw</title>
-  <meta name="description" content="LuckyDraw" />
-  <meta name="theme-color" content="#2563EB" />
+  <meta name="description" content="LuckyDraw — vòng quay may rủi" />
+  <meta name="theme-color" content="#07070f" />
   <meta name="application-name" content="LuckyDraw" />
-  <!-- Favicon (desktop) + Apple icon (thêm vào màn hình chính) -->
-  <link rel="icon" href="spin.png?v=4" type="image/png" sizes="any" />
-  <link rel="icon" href="spin.png?v=4" type="image/png" sizes="32x32" />
-  <link rel="icon" href="spin.png?v=4" type="image/png" sizes="192x192" />
-  <link rel="shortcut icon" href="spin.png?v=4" type="image/png" />
-  <link rel="apple-touch-icon" href="spin.png?v=4" sizes="180x180" />
-  <link rel="apple-touch-icon" href="spin.png?v=4" sizes="512x512" />
+  <link rel="icon" href="spin.png?v=5" type="image/png" sizes="any" />
+  <link rel="icon" href="spin.png?v=5" type="image/png" sizes="32x32" />
+  <link rel="icon" href="spin.png?v=5" type="image/png" sizes="192x192" />
+  <link rel="shortcut icon" href="spin.png?v=5" type="image/png" />
+  <link rel="apple-touch-icon" href="spin.png?v=5" sizes="180x180" />
+  <link rel="apple-touch-icon" href="spin.png?v=5" sizes="512x512" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LuckyDraw" />
-  <link rel="manifest" href="manifest.webmanifest?v=4" />
+  <link rel="manifest" href="manifest.webmanifest?v=5" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { barlow: ['Barlow', 'system-ui', 'sans-serif'] },
-        },
-      },
-    };
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --bg: #07070f;
+      --bg-gradient: radial-gradient(ellipse at 50% 0%, #1a1035 0%, #07070f 70%);
+      --neon-cyan: #00f0ff;
+      --neon-pink: #ff2d95;
+      --neon-purple: #b14cff;
+      --neon-yellow: #ffe600;
+      --neon-green: #39ff14;
+      --neon-orange: #ff6b00;
+      --neon-red: #ff003c;
+      --neon-blue: #00a2ff;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0c0;
+      --glass: rgba(15, 15, 30, 0.82);
+      --glass-border: rgba(0, 240, 255, 0.28);
+      --glow-cyan: 0 0 20px #00f0ff, 0 0 40px #00f0ff66;
+      --glow-pink: 0 0 20px #ff2d95, 0 0 40px #ff2d9566;
+      --glow-button: 0 0 30px #00f0ffaa, 0 8px 25px #00f0ff44;
+      --font: 'Inter', system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+    }
+
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
     html, body {
-      font-family: 'Barlow', system-ui, sans-serif;
       margin: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #f1f5f9;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-primary);
     }
 
-    /*
-      Mobile: full ngang (flexible 100%)
-      10 hàng dọc bằng nhau (1fr × 10):
-      1 Edit · 2 trống · 3–7 vòng xoay · 8–9 Spin (center) · 10 navbar
-    */
     .app {
       width: 100%;
       max-width: 100%;
-      margin: 0 auto;
-      /* 100dvh: full màn thật — tránh 100svh để hở khoảng dưới navbar */
       height: 100%;
       height: 100dvh;
       min-height: 100dvh;
-      display: grid;
-      grid-template-rows: repeat(10, minmax(0, 1fr));
-      grid-template-columns: minmax(0, 1fr);
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
-      /* Nền phẳng — tránh gradient trắng “che” hàng 8–9 */
-      background: #f1f5f9;
-      /* Chỉ top safe-area — nav full-bleed 2 bên + đáy (safe-area nằm trong .row-nav) */
-      padding: env(safe-area-inset-top, 0px) 0 0 0;
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      padding-top: env(safe-area-inset-top, 0px);
     }
 
-    /* Desktop/mobile: full viewport — không khóa width kiểu phone strip */
-
-    /* Hàng 1 — Edit */
-    .row-top {
-      grid-row: 1 / 2;
-      align-self: stretch;
-      width: 100%;
+    /* ── Top bar ── */
+    .top-bar {
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      padding: 0 14px;
-      min-height: 0;
-      overflow: hidden;
+      justify-content: space-between;
+      padding: 10px 16px 8px;
+      min-height: 52px;
+      z-index: 5;
     }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 0 16px #00f0ff55, 0 0 2px #00f0ffaa;
+      border: 1px solid rgba(0, 240, 255, 0.35);
+    }
+
+    .brand-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #fff;
+      text-shadow: 0 0 18px #00f0ff88;
+    }
+
     .edit-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      border: 1.5px solid #cbd5e1;
-      background: #fff;
-      border-radius: 14px;
-      padding: 10px 18px;
+      justify-content: center;
+      border: 1.5px solid rgba(0, 240, 255, 0.55);
+      background: rgba(0, 240, 255, 0.15);
+      border-radius: 999px;
+      padding: 10px 20px;
       font-family: inherit;
-      font-size: 1rem;
-      font-weight: 800;
-      color: #1e293b;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      box-shadow: 0 0 14px #00f0ff44;
       cursor: pointer;
       touch-action: manipulation;
+      transition: transform .12s, opacity .15s, box-shadow .15s;
     }
-    .edit-btn:active { transform: scale(0.97); }
+    .edit-btn:active { transform: scale(0.96); }
 
-    /* Hàng 3–7 — vòng xoay */
-    .row-wheel {
-      grid-row: 3 / 8; /* rows 3,4,5,6,7 */
-      align-self: stretch;
+    /* ── Wheel zone (~55–60%) ── */
+    .wheel-zone {
+      flex: 1 1 auto;
+      min-height: 0;
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 0;
-      padding: 0 12px;
+      padding: 4px 24px;
       position: relative;
-      overflow: hidden;
-    }
-
-    /* Hàng 8–9 — Spin (chính giữa 2 hàng), nền trong suốt */
-    .row-spin {
-      grid-row: 8 / 10; /* rows 8 + 9 */
-      align-self: stretch;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 0;
-      padding: 0 16px;
-      overflow: visible;
-      background: transparent;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Hàng 10 — navbar full mép (không hở lề) */
-    .row-nav {
-      grid-row: 10 / 11;
-      align-self: stretch;
-      justify-self: stretch;
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-      min-height: 0;
-      max-height: none;
-      display: flex;
-      flex-direction: row;
-      align-items: stretch;
-      justify-content: stretch;
-      overflow: hidden;
-      border-top: 1px solid rgba(15, 23, 42, 0.1);
-      background: #ffffff;
-      /* Nền trắng kéo sát đáy màn; nút tab nằm trên vùng safe-area */
-      padding: 0;
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-      margin: 0;
-      position: relative;
-      z-index: 3;
-      box-sizing: border-box;
     }
 
     .wheel-wrap {
       position: relative;
       width: min(100%, 100%);
-      height: 100%;
-      max-width: 100%;
-      max-height: 100%;
+      height: auto;
       aspect-ratio: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      box-shadow: none;
-      filter: none;
+      max-height: 100%;
+      margin: auto;
       cursor: pointer;
       touch-action: manipulation;
       user-select: none;
-      margin: auto;
-      z-index: 1;
+      filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.22));
     }
     .wheel-wrap.spinning { cursor: wait; }
     .wheel-wrap:active:not(.spinning) { transform: scale(0.985); }
+
     #wheel {
       display: block;
       width: 100%;
       height: 100%;
       border-radius: 50%;
       background: transparent;
-      border: none;
-      outline: none;
-      box-shadow: none;
-      filter: none;
     }
 
-    /* Droplet pointer — bottom-left, tip chọt sâu vào trong vòng */
+    /* Droplet pointer — bottom-left */
     .pointer {
       position: absolute;
-      left: 6%;
-      bottom: 10%;
+      left: 5%;
+      bottom: 9%;
       width: 48px;
       height: 66px;
       z-index: 20;
       pointer-events: none;
       transform: rotate(48deg) translateY(10px);
       transform-origin: 50% 18%;
-      filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+      filter: drop-shadow(0 0 10px #ff003ccc) drop-shadow(0 0 22px #ff003c88);
     }
     @media (min-width: 400px) {
-      .pointer { width: 54px; height: 74px; left: 7%; bottom: 11%; }
+      .pointer { width: 54px; height: 74px; left: 6%; bottom: 10%; }
+    }
+
+    /* ── Spin CTA ── */
+    .spin-zone {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px 14px;
+      z-index: 4;
     }
 
     .spin-btn {
-      width: min(72%, 240px);
-      height: 52px;
-      flex-shrink: 0;
-      margin: 0;
+      width: min(70%, 320px);
+      height: 68px;
       border: none;
-      border-radius: 16px;
+      border-radius: 20px;
       font-family: inherit;
-      font-weight: 800;
-      font-size: 1.15rem;
-      letter-spacing: 0.06em;
+      font-weight: 900;
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #fff;
-      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
-      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.32);
+      background: linear-gradient(180deg, #00f0ff 0%, #0080ff 100%);
+      box-shadow: var(--glow-button);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: transform .12s, opacity .15s;
       touch-action: manipulation;
+      transition: transform .12s, opacity .15s, box-shadow .15s;
+      text-shadow: 0 1px 2px rgba(0, 0, 40, 0.35);
     }
-    .spin-btn:active:not(:disabled) { transform: scale(0.97); }
-    .spin-btn:disabled { opacity: .6; cursor: not-allowed; }
+    .spin-btn:active:not(:disabled) { transform: scale(0.96); }
+    .spin-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: 0 0 12px #00f0ff44;
+    }
+
+    /* ── Bottom tabs ── */
+    .tab-bar {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      width: 100%;
+      min-height: 56px;
+      background: rgba(5, 5, 14, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid rgba(0, 240, 255, 0.18);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      z-index: 6;
+    }
 
     .tab-btn {
       flex: 1 1 0;
-      height: auto;
-      align-self: stretch;
+      min-width: 0;
       border: none;
       border-radius: 0;
       background: transparent;
       font-family: inherit;
       font-weight: 700;
-      font-size: clamp(0.7rem, 2.8vw, 0.85rem);
-      color: #64748b;
+      font-size: clamp(0.68rem, 2.6vw, 0.82rem);
+      color: var(--text-secondary);
       cursor: pointer;
-      padding: 0;
+      padding: 12px 2px;
       margin: 0;
-      min-width: 0;
-      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      transition: color .15s, background .15s;
       touch-action: manipulation;
+      transition: color .15s;
     }
     .tab-btn.active {
-      color: #1d4ed8;
-      background: linear-gradient(to top, rgba(37,99,235,.1), transparent);
+      color: var(--neon-pink);
+      text-shadow: 0 0 12px #ff2d95aa;
     }
     .tab-btn.active::after {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 12%;
+      right: 12%;
       height: 3px;
-      border-radius: 0;
-      background: #2563eb;
+      border-radius: 0 0 3px 3px;
+      background: var(--neon-pink);
+      box-shadow: 0 0 10px #ff2d95, 0 0 18px #ff2d9588;
     }
 
+    /* ── Modals ── */
     .modal-backdrop {
-      background: rgba(15, 23, 42, 0.5);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
-    /* Result popup — to, chữ rõ */
     .result-modal {
       animation: fadeIn .25s ease both;
     }
     .result-card {
       animation: popIn .45s cubic-bezier(.2, 1.25, .4, 1) both;
       width: min(92vw, 400px);
+      background: var(--glass);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 28px;
+      box-shadow: 0 0 40px #00f0ff33, 0 20px 50px rgba(0, 0, 0, 0.55);
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
     }
+    .result-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 12px #00f0ff88;
+    }
+    .result-text {
+      margin-top: 1rem;
+      font-size: clamp(1.75rem, 7vw, 2.25rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: #fff;
+      word-break: break-word;
+      padding: 0 4px;
+    }
+    .result-sub {
+      margin-top: 0.75rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--neon-yellow);
+      text-shadow: 0 0 14px #ffe60088;
+    }
+    .btn-ok {
+      margin-top: 1.75rem;
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      background: var(--neon-pink);
+      box-shadow: var(--glow-pink);
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .btn-ok:active { transform: scale(0.98); }
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -288,91 +335,251 @@
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    .seg-row input:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, .2);
-      border-color: #2563eb;
+    /* Edit modal */
+    .edit-sheet {
+      width: 100%;
+      max-width: 28rem;
+      max-height: 90dvh;
+      overflow-y: auto;
+      border-radius: 24px;
+      background: var(--glass);
+      border: 1.5px solid var(--glass-border);
+      box-shadow: 0 0 40px #00f0ff22, 0 24px 60px rgba(0, 0, 0, 0.6);
+    }
+    .edit-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+      background: rgba(10, 10, 22, 0.95);
+      backdrop-filter: blur(10px);
+    }
+    .edit-header h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .edit-header p {
+      margin: 4px 0 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--neon-cyan);
+    }
+    .btn-ghost {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .btn-ghost:active { background: rgba(255, 255, 255, 0.06); }
+
+    .edit-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .field-label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text-secondary);
     }
 
+    .count-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .count-btn {
+      height: 40px;
+      width: 40px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: background .15s, color .15s, box-shadow .15s, border-color .15s;
+      border: 1.5px solid rgba(160, 160, 192, 0.25);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+    }
+    .count-btn.active {
+      border-color: transparent;
+      background: var(--neon-cyan);
+      color: #041018;
+      box-shadow: 0 0 16px #00f0ff88;
+    }
+
+    .seg-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .seg-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .seg-num {
+      width: 20px;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+    .seg-swatch {
+      height: 32px;
+      width: 32px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      box-shadow: 0 0 10px currentColor;
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+    }
+    .seg-input {
+      width: 100%;
+      border-radius: 12px;
+      border: 1.5px solid rgba(0, 240, 255, 0.2);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #fff;
+      outline: none;
+    }
+    .seg-input:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+    }
+    .seg-input::placeholder { color: #666688; }
+
+    .edit-footer {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      gap: 8px;
+      padding: 16px 20px;
+      border-top: 1px solid rgba(0, 240, 255, 0.15);
+      background: rgba(10, 10, 22, 0.96);
+    }
+    .btn-cancel {
+      flex: 1;
+      border-radius: 14px;
+      border: 1.5px solid rgba(160, 160, 192, 0.35);
+      background: transparent;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .btn-save {
+      flex: 1;
+      border-radius: 14px;
+      border: none;
+      background: var(--neon-cyan);
+      padding: 12px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 800;
+      color: #041018;
+      box-shadow: 0 0 20px #00f0ff66;
+      cursor: pointer;
+    }
+    .btn-cancel:active, .btn-save:active { transform: scale(0.98); }
+
+    .hidden { display: none !important; }
+    .flex { display: flex !important; }
+    .fixed { position: fixed; }
+    .inset-0 { inset: 0; }
+    .z-50 { z-index: 50; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .p-4 { padding: 1rem; }
+    .p-5 { padding: 1.25rem; }
   </style>
 </head>
-<body class="font-barlow text-slate-800 antialiased">
+<body>
   <div class="app">
-    <!-- Row 1: chỉ Edit -->
-    <header class="row-top">
+    <header class="top-bar">
+      <div class="brand">
+        <img class="brand-icon" src="spin.png?v=5" width="36" height="36" alt="" />
+        <span class="brand-name">LuckyDraw</span>
+      </div>
       <button id="btnEdit" type="button" class="edit-btn" title="Chỉnh sửa vòng quay">Edit</button>
     </header>
 
-    <!-- Hàng 3–7: vòng xoay -->
-    <section class="row-wheel">
+    <section class="wheel-zone">
       <div class="wheel-wrap" id="wheelBox" role="button" tabindex="0" aria-label="Chạm để quay">
-        <!-- Droplet pointer bottom-left -->
         <div class="pointer" aria-hidden="true">
           <svg viewBox="0 0 42 58" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <path d="M21 4 C21 4 4 24 4 34 C4 44.5 11.5 52 21 52 C30.5 52 38 44.5 38 34 C38 24 21 4 21 4 Z"
-                  fill="#0f0f0f"/>
-            <ellipse cx="21" cy="36" rx="9.5" ry="10.5" fill="#ef2222"/>
-            <ellipse cx="18" cy="32" rx="3" ry="2.2" fill="#ff7a7a" opacity=".55"/>
+                  fill="#1a0508" stroke="#ff003c" stroke-width="1.2"/>
+            <ellipse cx="21" cy="36" rx="9.5" ry="10.5" fill="#ff003c"/>
+            <ellipse cx="18" cy="32" rx="3" ry="2.2" fill="#ff7a9a" opacity=".65"/>
           </svg>
         </div>
         <canvas id="wheel"></canvas>
       </div>
     </section>
 
-    <!-- Hàng 8–9: Spin center -->
-    <div class="row-spin">
-      <button id="btnSpin" type="button" class="spin-btn">Spin</button>
+    <div class="spin-zone">
+      <button id="btnSpin" type="button" class="spin-btn">SPIN</button>
     </div>
 
-    <!-- Row 10: navbar -->
-    <nav class="row-nav" id="tabBar" role="tablist" aria-label="Chế độ vòng quay"></nav>
+    <nav class="tab-bar" id="tabBar" role="tablist" aria-label="Chế độ vòng quay"></nav>
   </div>
 
-  <!-- Result popup (to, chữ rõ) -->
+  <!-- Result modal -->
   <div id="resultModal" class="result-modal fixed inset-0 z-50 hidden items-center justify-center p-5 modal-backdrop" role="dialog" aria-modal="true">
-    <div class="result-card rounded-3xl bg-white px-6 py-8 text-center shadow-2xl ring-1 ring-slate-200">
-      <p class="text-sm font-extrabold uppercase tracking-[0.28em] text-blue-500">Kết quả</p>
-      <p id="resultText" class="mt-4 text-[2rem] sm:text-4xl font-black leading-tight text-slate-900 break-words px-1"></p>
-      <p class="mt-3 text-base font-semibold text-slate-500">1 2 3 dzô</p>
-      <button
-        id="btnCloseResult"
-        type="button"
-        class="mt-7 w-full rounded-2xl bg-blue-600 py-3.5 text-base font-extrabold text-white shadow-lg shadow-blue-500/30 active:scale-[.98]"
-      >
-        OK
-      </button>
+    <div class="result-card">
+      <p class="result-label">Kết quả</p>
+      <p id="resultText" class="result-text"></p>
+      <p class="result-sub">1 2 3 dzô</p>
+      <button id="btnCloseResult" type="button" class="btn-ok">OK</button>
     </div>
   </div>
 
-  <!-- Edit Modal -->
+  <!-- Edit modal -->
   <div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop" role="dialog" aria-modal="true">
-    <div class="w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-2xl bg-white shadow-2xl ring-1 ring-slate-200">
-      <div class="sticky top-0 flex items-center justify-between border-b border-slate-100 bg-white/95 px-5 py-4 backdrop-blur z-10">
+    <div class="edit-sheet">
+      <div class="edit-header">
         <div>
-          <h2 class="text-lg font-extrabold text-slate-900">Chỉnh sửa vòng quay</h2>
-          <p class="text-xs font-medium text-slate-500" id="editTabLabel">Tab hiện tại</p>
+          <h2>Chỉnh sửa vòng quay</h2>
+          <p id="editTabLabel">Tab hiện tại</p>
         </div>
-        <button id="btnCloseEdit" type="button" class="rounded-lg px-3 py-2 text-sm font-bold text-slate-500 hover:bg-slate-100" aria-label="Đóng">Đóng</button>
+        <button id="btnCloseEdit" type="button" class="btn-ghost" aria-label="Đóng">Đóng</button>
       </div>
 
-      <div class="space-y-5 px-5 py-5">
+      <div class="edit-body">
         <div>
-          <label class="mb-2 block text-sm font-bold text-slate-700">Số ô (3 → 9)</label>
-          <div class="flex flex-wrap gap-2" id="countPicker"></div>
+          <label class="field-label">Số ô (3 → 9)</label>
+          <div class="count-picker" id="countPicker"></div>
         </div>
         <div>
-          <label class="mb-2 block text-sm font-bold text-slate-700">Nội dung từng ô</label>
-          <div class="space-y-2" id="segList"></div>
+          <label class="field-label">Nội dung từng ô</label>
+          <div class="seg-list" id="segList"></div>
         </div>
       </div>
 
-      <div class="sticky bottom-0 flex gap-2 border-t border-slate-100 bg-white px-5 py-4">
-        <button id="btnCancelEdit" type="button" class="flex-1 rounded-xl border border-slate-200 bg-white py-3 text-sm font-bold text-slate-600">
-          Hủy
-        </button>
-        <button id="btnSaveEdit" type="button" class="flex-1 rounded-xl bg-blue-600 py-3 text-sm font-extrabold text-white shadow-md shadow-blue-500/25">
-          Lưu
-        </button>
+      <div class="edit-footer">
+        <button id="btnCancelEdit" type="button" class="btn-cancel">Hủy</button>
+        <button id="btnSaveEdit" type="button" class="btn-save">Lưu</button>
       </div>
     </div>
   </div>
@@ -380,38 +587,32 @@
   <script>
     // ─── Constants ───────────────────────────────────────────
     const STORAGE_KEY = 'luckydraw_v3';
-    // 9 màu riêng biệt — không lặp, không 2 xanh kề nhau
-    // Xanh dương → Đỏ → Tím → Vàng → Xanh lá → Cam → Hồng → Nâu → Indigo
+    // 9 màu neon — max 9 ô
     const COLORS = [
-      '#2563EB', // xanh dương
-      '#EF4444', // đỏ
-      '#A855F7', // tím
-      '#EAB308', // vàng
-      '#22C55E', // xanh lá
-      '#F97316', // cam
-      '#EC4899', // hồng
-      '#A16207', // nâu vàng
-      '#4F46E5', // indigo
+      '#00a2ff', // blue
+      '#ff003c', // red
+      '#b14cff', // purple
+      '#ffe600', // yellow
+      '#39ff14', // green
+      '#ff6b00', // orange
+      '#ff2d95', // pink
+      '#00f0ff', // cyan
+      '#7c3aed', // deep violet (9th)
     ];
 
-    /** Lấy n màu không lặp; nếu first≈last thì xoay để tránh 2 màu giống kề mép */
     function colorsForCount(n) {
       const base = COLORS.slice(0, Math.min(n, COLORS.length));
-      // max 9 ô = đủ 9 màu, không lặp
       if (n <= COLORS.length) {
-        // đảm bảo ô đầu & ô cuối khác hẳn (tránh kề nhau trên vòng tròn)
         if (n > 2 && base[0] === base[n - 1]) {
-          // không xảy ra với slice unique, nhưng phòng hờ
           const mid = base.splice(1, 1)[0];
           base.push(mid);
         }
         return base;
       }
-      // fallback (không dùng vì max 9)
       return Array.from({ length: n }, (_, i) => COLORS[i % COLORS.length]);
     }
-    // Pointer tip on rim: bottom-left ≈ 135° (3π/4) in canvas math coords
-    // (0 = right, π/2 = bottom, π = left, -π/2 = top)
+
+    // Pointer tip on rim: bottom-left ≈ 135° (3π/4)
     const POINTER_ANGLE = (3 * Math.PI) / 4;
 
     const TAB_IDS = ['an-nhau', 'custom1', 'custom2', 'custom3'];
@@ -529,11 +730,10 @@
     // ─── Canvas wheel ────────────────────────────────────────
     function resizeCanvas() {
       const parent = wheelBox.parentElement;
-      // Fit square into rows 3–7 zone
       let size = 0;
       if (parent) {
-        const pw = parent.clientWidth - 24;
-        const ph = parent.clientHeight;
+        const pw = parent.clientWidth - 48; // padding 24×2
+        const ph = parent.clientHeight - 8;
         size = Math.max(0, Math.floor(Math.min(pw, ph)));
         if (size > 0) {
           wheelBox.style.width = size + 'px';
@@ -557,22 +757,20 @@
       if (!size) return;
       const cx = size / 2;
       const cy = size / 2;
-      // Full radius — không để mép vuông/trong suốt quanh bánh
       const radius = size / 2;
       const arc = (Math.PI * 2) / n;
       const palette = colorsForCount(n);
 
       ctx.clearRect(0, 0, size, size);
 
-      // Bóng tròn vẽ bằng canvas (không CSS — tránh bóng vuông)
-      // co radius bóng để không chạm 4 góc canvas
-      const shadowR = radius * 0.96;
+      // Soft circular glow under wheel (cheap — one blur)
+      const shadowR = radius * 0.94;
       ctx.save();
-      ctx.translate(cx, cy + Math.max(4, size * 0.018));
+      ctx.translate(cx, cy + Math.max(3, size * 0.012));
       ctx.beginPath();
       ctx.arc(0, 0, shadowR, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.22)';
-      ctx.filter = 'blur(12px)';
+      ctx.fillStyle = 'rgba(0, 240, 255, 0.18)';
+      ctx.filter = 'blur(14px)';
       ctx.fill();
       ctx.filter = 'none';
       ctx.restore();
@@ -581,7 +779,6 @@
       ctx.translate(cx, cy);
       ctx.rotate(rotation);
 
-      // Clip tròn — mép bánh sạch
       ctx.beginPath();
       ctx.arc(0, 0, radius - 0.5, 0, Math.PI * 2);
       ctx.clip();
@@ -591,7 +788,6 @@
         const end = start + arc;
         const color = palette[i];
 
-        // Ô màu — không viền, không line trắng
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.arc(0, 0, radius, start, end);
@@ -599,26 +795,34 @@
         ctx.fillStyle = color;
         ctx.fill();
 
+        // thin light edge between segments
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, radius, start, end);
+        ctx.closePath();
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
         const mid = start + arc / 2;
         ctx.save();
-        // +π: chữ đọc từ mép ngoài → tâm (dễ đọc khi pointer bên trái)
+        // +π: text reads rim → center (pointer on left)
         ctx.rotate(mid + Math.PI);
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#fff';
-        ctx.shadowColor = 'rgba(0,0,0,0.28)';
-        ctx.shadowBlur = 2;
+        ctx.shadowColor = 'rgba(0,0,0,0.55)';
+        ctx.shadowBlur = 3;
         ctx.shadowOffsetY = 1;
 
         const text = labels[i];
         const maxW = radius * 0.56;
-        // Sau khi +π: mép ngoài nằm ở x âm
         const textX = -(radius - 14);
         let fontSize = n <= 5 ? 15 : n <= 7 ? 13 : 11;
-        ctx.font = `800 ${fontSize}px Barlow, system-ui, sans-serif`;
+        ctx.font = `800 ${fontSize}px Inter, system-ui, sans-serif`;
         while (ctx.measureText(text).width > maxW && fontSize > 9) {
           fontSize -= 1;
-          ctx.font = `800 ${fontSize}px Barlow, system-ui, sans-serif`;
+          ctx.font = `800 ${fontSize}px Inter, system-ui, sans-serif`;
         }
         if (ctx.measureText(text).width > maxW && text.includes(' ')) {
           const parts = splitLabel(text, ctx, maxW);
@@ -633,20 +837,34 @@
         ctx.restore();
       }
 
-      // Chốt giữa — đen + đỏ (đồng bộ pointer giọt nước)
-      const hub = Math.max(11, size * 0.042);
+      // Outer rim highlight
+      ctx.beginPath();
+      ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Hub — black gloss + neon red core
+      const hub = Math.max(12, size * 0.044);
       ctx.beginPath();
       ctx.arc(0, 0, hub, 0, Math.PI * 2);
-      ctx.fillStyle = '#0f0f0f';
+      ctx.fillStyle = '#0a0a12';
       ctx.fill();
+      ctx.strokeStyle = 'rgba(255,0,60,0.55)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
       ctx.beginPath();
-      ctx.arc(0, 0, hub * 0.55, 0, Math.PI * 2);
-      ctx.fillStyle = '#ef2222';
+      ctx.arc(0, 0, hub * 0.52, 0, Math.PI * 2);
+      ctx.fillStyle = '#ff003c';
+      ctx.shadowColor = '#ff003c';
+      ctx.shadowBlur = 10;
       ctx.fill();
-      // highlight nhẹ giống pointer
+      ctx.shadowBlur = 0;
+
       ctx.beginPath();
       ctx.ellipse(-hub * 0.12, -hub * 0.14, hub * 0.18, hub * 0.12, 0, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,122,122,0.45)';
+      ctx.fillStyle = 'rgba(255,140,160,0.55)';
       ctx.fill();
 
       ctx.restore();
@@ -671,28 +889,22 @@
       return best;
     }
 
-    // ─── Spin logic (pointer = bottom-left) ──────────────────
-    // Segment i unrotated center (math angle): i*arc - PI/2 + arc/2
-    // After +rotation R, center on screen: that + R
-    // Want center under POINTER_ANGLE:
-    //   i*arc - PI/2 + arc/2 + R ≡ POINTER_ANGLE  (mod 2π)
-    //   R ≡ POINTER_ANGLE + PI/2 - i*arc - arc/2
-
+    // ─── Spin logic ──────────────────────────────────────────
     function getWinnerIndex(rot) {
       const n = currentLabels().length;
       const arc = (Math.PI * 2) / n;
       const r = ((rot % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-      // Absolute angle on unrotated wheel under the pointer
-      // screenAngle = wheelAngle + r  =>  wheelAngle = POINTER_ANGLE - r
-      // Map to segment index where segments start at -PI/2 and go CCW
       let a = POINTER_ANGLE - r;
-      // relative to top (-PI/2): add PI/2
       let normalized = ((a + Math.PI / 2) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
       return Math.floor(normalized / arc) % n;
     }
 
     function easeOutCubic(t) {
       return 1 - Math.pow(1 - t, 3);
+    }
+
+    function setSpinLabel(spinningNow) {
+      btnSpin.textContent = spinningNow ? 'Đang quay...' : 'SPIN';
     }
 
     function spin() {
@@ -703,24 +915,25 @@
       hideResult();
       spinning = true;
       btnSpin.disabled = true;
+      setSpinLabel(true);
       wheelBox.classList.add('spinning');
 
       const n = labels.length;
       const targetIndex = Math.floor(Math.random() * n);
       const arc = (Math.PI * 2) / n;
 
-      // Land so center of targetIndex sits under POINTER_ANGLE
       const targetRotMod =
         ((POINTER_ANGLE + Math.PI / 2 - targetIndex * arc - arc / 2) % (Math.PI * 2) + Math.PI * 2) %
         (Math.PI * 2);
 
-      const extraSpins = 4 + Math.floor(Math.random() * 3);
+      // 5–6 full spins, ~4.5–5s
+      const extraSpins = 5 + Math.floor(Math.random() * 2);
       const startRot = rotation;
       let delta = targetRotMod - (((startRot % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2));
       delta = ((delta % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
       const endRot = startRot + delta + extraSpins * Math.PI * 2;
 
-      const duration = 4200 + Math.random() * 800;
+      const duration = 4500 + Math.random() * 500;
       const t0 = performance.now();
 
       function frame(now) {
@@ -736,6 +949,7 @@
           showResult(labels[winner] ?? labels[targetIndex]);
           spinning = false;
           btnSpin.disabled = false;
+          setSpinLabel(false);
           wheelBox.classList.remove('spinning');
         }
       }
@@ -781,11 +995,7 @@
         b.type = 'button';
         b.textContent = String(c);
         const active = editDraft.labels.length === c;
-        b.className =
-          'h-10 w-10 rounded-xl text-sm font-extrabold transition ' +
-          (active
-            ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
-            : 'border border-slate-200 bg-white text-slate-600');
+        b.className = 'count-btn' + (active ? ' active' : '');
         b.addEventListener('click', () => {
           syncDraftFromInputs();
           const cur = editDraft.labels;
@@ -807,21 +1017,26 @@
       segList.innerHTML = '';
       editDraft.labels.forEach((label, i) => {
         const row = document.createElement('div');
-        row.className = 'seg-row flex items-center gap-2';
+        row.className = 'seg-row';
+
+        const num = document.createElement('span');
+        num.className = 'seg-num';
+        num.textContent = String(i + 1);
+
+        const color = colorsForCount(editDraft.labels.length)[i];
         const swatch = document.createElement('span');
-        swatch.className = 'h-8 w-8 shrink-0 rounded-lg ring-1 ring-black/5';
-        swatch.style.background = colorsForCount(editDraft.labels.length)[i];
+        swatch.className = 'seg-swatch';
+        swatch.style.background = color;
+        swatch.style.color = color;
+
         const input = document.createElement('input');
         input.type = 'text';
         input.value = label;
         input.maxLength = 40;
         input.dataset.idx = String(i);
-        input.className =
-          'w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-800';
+        input.className = 'seg-input';
         input.placeholder = 'Ô ' + (i + 1);
-        const num = document.createElement('span');
-        num.className = 'w-5 text-center text-xs font-bold text-slate-400';
-        num.textContent = String(i + 1);
+
         row.appendChild(num);
         row.appendChild(swatch);
         row.appendChild(input);
@@ -883,7 +1098,6 @@
 
     // ─── Init ────────────────────────────────────────────────
     renderTabs();
-    // Wait a frame so grid sizes resolve on mobile
     requestAnimationFrame(() => {
       resizeCanvas();
       requestAnimationFrame(resizeCanvas);
