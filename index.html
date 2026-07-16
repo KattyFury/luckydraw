@@ -129,7 +129,7 @@
     }
     .edit-btn:active { transform: scale(0.96); }
 
-    /* Hàng 3–7 — vòng xoay (5 hàng) */
+    /* Hàng 3–7 — vòng xoay (5 hàng). Tâm bánh ≈ ranh giới hàng 5|6 (50% màn) */
     .wheel-zone {
       grid-row: 3 / 8;
       align-self: stretch;
@@ -138,19 +138,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 12px;
+      padding: 0 10px 0 6px;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
+      /* zone 20–70% → tâm 45%; +5dvh → ~50% (giữa hàng 5–6) */
+      padding-top: 5dvh;
+      box-sizing: border-box;
     }
 
     .wheel-wrap {
       position: relative;
-      width: min(100%, 100%);
-      height: 100%;
+      width: auto;
+      height: auto;
       max-width: 100%;
       max-height: 100%;
       aspect-ratio: 1;
-      margin: auto;
+      margin: 0 auto;
+      flex-shrink: 1;
       cursor: pointer;
       touch-action: manipulation;
       user-select: none;
@@ -168,21 +172,21 @@
       background: transparent;
     }
 
-    /* Droplet pointer — bottom-left (cùng primary hồng) */
+    /* Droplet pointer — trái giữa bánh (9 giờ), tip hướng vào tâm → chữ thắng nằm ngang dễ đọc */
     .pointer {
       position: absolute;
-      left: 5%;
-      bottom: 9%;
-      width: 48px;
-      height: 66px;
+      left: 0;
+      top: 50%;
+      width: 44px;
+      height: 60px;
       z-index: 20;
       pointer-events: none;
-      transform: rotate(48deg) translateY(10px);
-      transform-origin: 50% 18%;
+      transform: translate(-42%, -50%) rotate(90deg);
+      transform-origin: 50% 50%;
       filter: drop-shadow(0 0 10px #ff2d95cc) drop-shadow(0 0 22px #ff2d9588);
     }
     @media (min-width: 400px) {
-      .pointer { width: 54px; height: 74px; left: 6%; bottom: 10%; }
+      .pointer { width: 50px; height: 68px; }
     }
 
     /* Hàng 8–9 — Spin (chính giữa 2 hàng) */
@@ -645,8 +649,8 @@
       return Array.from({ length: n }, (_, i) => COLORS[i % COLORS.length]);
     }
 
-    // Pointer tip on rim: bottom-left ≈ 135° (3π/4)
-    const POINTER_ANGLE = (3 * Math.PI) / 4;
+    // Pointer tip on rim: left-center = 180° (π) — chữ thắng đọc ngang rim→tâm
+    const POINTER_ANGLE = Math.PI;
 
     const TAB_IDS = ['an-nhau', 'custom1', 'custom2', 'custom3'];
     const TAB_LABELS = {
@@ -765,9 +769,10 @@
       const parent = wheelBox.parentElement;
       let size = 0;
       if (parent) {
-        const pw = parent.clientWidth - 24;
-        const ph = parent.clientHeight;
-        size = Math.max(0, Math.floor(Math.min(pw, ph)));
+        // Chừa chỗ pointer trái + thu nhỏ bánh (~76%) để chữ/pointer thoáng
+        const pw = parent.clientWidth - 28;
+        const ph = parent.clientHeight - 8;
+        size = Math.max(0, Math.floor(Math.min(pw, ph) * 0.76));
         if (size > 0) {
           wheelBox.style.width = size + 'px';
           wheelBox.style.height = size + 'px';
@@ -839,7 +844,7 @@
 
         const mid = start + arc / 2;
         ctx.save();
-        // +π: text reads rim → center (pointer on left)
+        // +π: text reads rim → center (pointer left @ π → chữ thắng nằm ngang)
         ctx.rotate(mid + Math.PI);
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
@@ -849,9 +854,9 @@
         ctx.shadowOffsetY = 1;
 
         const text = labels[i];
-        const maxW = radius * 0.56;
-        const textX = -(radius - 14);
-        let fontSize = n <= 5 ? 15 : n <= 7 ? 13 : 11;
+        const maxW = radius * 0.58;
+        const textX = -(radius - 12);
+        let fontSize = n <= 5 ? 16 : n <= 7 ? 14 : 12;
         ctx.font = `800 ${fontSize}px Inter, system-ui, sans-serif`;
         while (ctx.measureText(text).width > maxW && fontSize > 9) {
           fontSize -= 1;
